@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TradePainkiller — Neden Zarar Ettiğini 30 Saniyede Gör</title>
+  <meta name="description" content="Binance Futures trade verilerini analiz et. Gece kayıpları, revenge trading, bozuk R/R oranları — hepsini 30 saniyede gör.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: {
+              0: '#050505',
+              1: '#0a0a0a',
+              2: '#111111',
+              3: '#171717',
+              4: '#1e1e1e',
+            },
+            gain: '#10B981',
+            loss: '#EF4444',
+            accent: '#10B981',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { background: #050505; }
+    body { background: #050505; color: #e5e5e5; }
+
+    /* Glow effects */
+    .glow-green { box-shadow: 0 0 40px rgba(16, 185, 129, 0.15), 0 0 80px rgba(16, 185, 129, 0.05); }
+    .glow-green-sm { box-shadow: 0 0 20px rgba(16, 185, 129, 0.12); }
+    .glow-red { box-shadow: 0 0 30px rgba(239, 68, 68, 0.1); }
+    .btn-glow { 
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25), 0 0 60px rgba(16, 185, 129, 0.1);
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover { 
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.35), 0 0 80px rgba(16, 185, 129, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* Gradient text */
+    .text-gradient {
+      background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Grid background */
+    .grid-bg {
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Radial glow hero */
+    .hero-glow {
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(16,185,129,0.06) 0%, transparent 70%);
+    }
+
+    /* Terminal styling */
+    .terminal {
+      background: #0c0c0c;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* Insight left borders */
+    .insight-red { border-left: 2px solid #EF4444; background: rgba(239,68,68,0.04); }
+    .insight-amber { border-left: 2px solid #F59E0B; background: rgba(245,158,11,0.04); }
+    .insight-purple { border-left: 2px solid #8B5CF6; background: rgba(139,92,246,0.04); }
+    .insight-green { border-left: 2px solid #10B981; background: rgba(16,185,129,0.04); }
+    .insight-blue { border-left: 2px solid #3B82F6; background: rgba(59,130,246,0.04); }
+
+    /* Progress bar animation */
+    .progress-fill {
+      background: linear-gradient(90deg, #D97706, #EF4444);
+      animation: pulse-fill 2s ease-in-out infinite;
+    }
+    @keyframes pulse-fill {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    /* Fade in animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.6s ease-out forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+    /* Demo tab active */
+    .demo-tab-active {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10B981;
+    }
+
+    /* Noise texture overlay */
+    .noise::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Separator */
+    .sep {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    }
+  </style>
+</head>
+<body class="font-sans noise" x-data="app()" x-cloak>
+
+  <!-- ═══════════════════ NAVBAR ═══════════════════ -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(5,5,5,0.8); backdrop-filter: blur(20px) saturate(180%);">
+    <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-gain/20 to-gain/5 border border-gain/20 flex items-center justify-center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>
+        </div>
+        <span class="text-white font-semibold text-sm tracking-tight">TradePainkiller</span>
+      </a>
+      <button 
+        @click="lang = lang === 'tr' ? 'en' : 'tr'" 
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 hover:border-white/20 transition-all text-xs font-medium text-neutral-400 hover:text-white"
+      >
+        <span x-text="lang === 'tr' ? '🇹🇷 TR' : '🇬🇧 EN'"></span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10l5 5 5-5"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="relative pt-28 pb-20 md:pt-36 md:pb-28 hero-glow grid-bg">
+    <div class="max-w-3xl mx-auto px-5 text-center">
+      
+      <div class="fade-up delay-1 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/8 bg-white/[0.03] mb-8">
+        <span class="w-1.5 h-1.5 rounded-full bg-gain animate-pulse"></span>
+        <span class="text-xs text-neutral-400 font-medium" x-show="lang==='tr'">Binance Futures trader'ları için</span>
+        <span class="text-xs text-neutral-400 font-medium" x-show="lang==='en'">Built for Binance Futures traders</span>
+      </div>
+
+      <h1 class="fade-up delay-2 text-4xl md:text-[3.4rem] md:leading-[1.12] font-bold tracking-tight text-gradient mb-6">
+        <span x-show="lang==='tr'">Winrate'in yüksek ama<br class="hidden md:block"> hâlâ zarar ediyorsun. <span class="text-white">Neden?</span></span>
+        <span x-show="lang==='en'">Your winrate is high but<br class="hidden md:block"> you're still losing money. <span class="text-white">Why?</span></span>
+      </h1>
+
+      <p class="fade-up delay-3 text-base md:text-lg text-neutral-400 max-w-xl mx-auto mb-10 leading-relaxed">
+        <span x-show="lang==='tr'">Binance Futures'ta neden zarar ettiğini 30 saniyede gör.<br>Muhtemelen yanlış saatlerde trade ediyorsun. Kanıtlayalım.</span>
+        <span x-show="lang==='en'">See why you're losing on Binance Futures in 30 seconds.<br>You're probably trading at the wrong hours. Let's prove it.</span>
+      </p>
+
+      <div class="fade-up delay-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#demo" class="group px-6 py-3 rounded-xl border border-white/10 hover:border-white/20 transition-all text-sm font-medium text-neutral-300 hover:text-white flex items-center gap-2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span x-show="lang==='tr'">Fake Veriyle Demo Gör</span>
+          <span x-show="lang==='en'">See Demo with Fake Data</span>
+        </a>
+        <a href="#pricing" class="btn-glow px-7 py-3 rounded-xl bg-gain text-surface-0 text-sm font-semibold flex items-center gap-2">
+          <span x-show="lang==='tr'">Kendi Verinle Dene →</span>
+          <span x-show="lang==='en'">Try with Your Data →</span>
+        </a>
+      </div>
+
+      <p class="fade-up delay-5 mt-5 text-[11px] text-neutral-500">
+        <span x-show="lang==='tr'">Read-only API · İşlem yetkisi yok · 30 saniye kurulum</span>
+        <span x-show="lang==='en'">Read-only API · No trading permission · 30 second setup</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ PAIN STATS ═══════════════════ -->
+  <section class="py-16 md:py-24 relative">
+    <div class="max-w-4xl mx-auto px-5">
+      <p class="text-center text-xs font-medium text-neutral-500 uppercase tracking-widest mb-10">
+        <span x-show="lang==='tr'">Gerçek bir trader'ın 30 günlük verisi</span>
+        <span x-show="lang==='en'">Real data from a trader's last 30 days</span>
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+        <!-- Stat 1 -->
+        <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-loss/20 transition-all glow-red">
+          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">-$412</div>
+          <div class="text-sm text-neutral-500 mt-2">
+            <span x-show="lang==='tr'">gece trade kaybı</span>
+            <span x-show="lang==='en'">night trade losses</span>
+          </div>
+          <div class="text-[11px] text-neutral-600 mt-1">23:00 – 02:00</div>
+        </div>
+        <!-- Stat 2 -->
+        <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-yellow-500/20 transition-all">
+          <div class="text-4xl md:text-5xl font-bold text-white font-mono tracking-tight">0.53</div>
+          <div class="text-sm text-neutral-500 mt-2">
+            <span x-show="lang==='tr'">R/R oranın</span>
+            <span x-show="lang==='en'">your R/R ratio</span>
+          </div>
+          <div class="text-[11px] text-neutral-600 mt-1">
+            <span x-show="lang==='tr'">min. 0.95 gerekli</span>
+            <span x-show="lang==='en'">min. 0.95 needed</span>
+          </div>
+        </div>
+        <!-- Stat 3 -->
+        <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-loss/20 transition-all glow-red">
+          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">74%</div>
+          <div class="text-sm text-neutral-500 mt-2">
+            <span x-show="lang==='tr'">gece zarar oranı</span>
+            <span x-show="lang==='en'">night loss rate</span>
+          </div>
+          <div class="text-[11px] text-neutral-600 mt-1">
+            <span x-show="lang==='tr'">31 işlemden 23'ü</span>
+            <span x-show="lang==='en'">23 out of 31 trades</span>
+          </div>
+        </div>
+      </div>
+      <p class="text-center text-sm text-neutral-500 mt-6">
+        <span x-show="lang==='tr'">Bu sayılar gerçek bir trader'a ait. API key bağla, <span class="text-white">30 saniyede seninkini gör.</span></span>
+        <span x-show="lang==='en'">These numbers belong to a real trader. Connect your API key, <span class="text-white">see yours in 30 seconds.</span></span>
+      </p>
+    </div>
+  </section>
+
+  <div class="sep max-w-5xl mx-auto"></div>
+
+  <!-- ═══════════════════ INTERACTIVE DEMO ═══════════════════ -->
+  <section id="demo" class="py-16 md:py-24">
+    <div class="max-w-5xl mx-auto px-5">
+      
+      <div class="text-center mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-3">
+          <span x-show="lang==='tr'">emre_futures'ın 30 günlük analizi</span>
+          <span x-show="lang==='en'">emre_futures's 30-day analysis</span>
+        </h2>
+        <p class="text-sm text-neutral-500">
+          <span x-show="lang==='tr'">143 işlem · %51 winrate · <span class="text-loss">net: -$550</span> · $4,200 ile başladı, $3,650 ile bitirdi</span>
+          <span x-show="lang==='en'">143 trades · 51% winrate · <span class="text-loss">net: -$550</span> · Started $4,200, ended $3,650</span>
+        </p>
+      </div>
+
+      <!-- Terminal Window -->
+      <div class="terminal rounded-2xl overflow-hidden">
+        <!-- Terminal header -->
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
+          <div class="flex items-center gap-2">
+            <div class="terminal-dot bg-[#ff5f57]"></div>
+            <div class="terminal-dot bg-[#febc2e]"></div>
+            <div class="terminal-dot bg-[#28c840]"></div>
+          </div>
+          <span class="text-[11px] text-neutral-600 font-mono">trade-analyzer — emre_futures</span>
+          <div class="w-16"></div>
+        </div>
+
+        <div class="flex flex-col md:flex-row">
+          <!-- Sidebar Tabs -->
+          <div class="md:w-56 border-b md:border-b-0 md:border-r border-white/[0.06] p-3 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
+            <template x-for="(tab, i) in demoTabs" :key="i">
+              <button 
+                @click="activeDemo = i" 
+                :class="activeDemo === i ? 'demo-tab-active' : 'text-neutral-500 hover:text-neutral-300 border-transparent hover:bg-white/[0.02]'"
+                class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg border text-xs font-medium transition-all whitespace-nowrap text-left"
+              >
+                <span x-text="tab.icon" class="text-sm"></span>
+                <span x-text="lang === 'tr' ? tab.tr : tab.en"></span>
+              </button>
+            </template>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1 p-5 md:p-7 min-h-[320px]">
+            <template x-for="(tab, i) in demoTabs" :key="'c'+i">
+              <div x-show="activeDemo === i" x-transition.opacity.duration.200ms>
+                <div class="flex items-center gap-2 mb-4">
+                  <span class="text-lg" x-text="tab.icon"></span>
+                  <h3 class="text-base font-semibold text-white" x-text="lang === 'tr' ? tab.titleTr : tab.titleEn"></h3>
+                </div>
+                <div class="rounded-xl p-4 mb-4" :class="tab.insightClass">
+                  <p class="text-sm font-medium mb-1" :class="tab.titleColor" x-text="lang === 'tr' ? tab.headlineTr : tab.headlineEn"></p>
+                  <p class="text-[13px] text-neutral-400 leading-relaxed" x-text="lang === 'tr' ? tab.bodyTr : tab.bodyEn"></p>
+                </div>
+                <div x-show="tab.extraTr" class="rounded-xl p-4 bg-white/[0.02] border border-white/[0.04]">
+                  <p class="text-xs text-neutral-500 leading-relaxed" x-text="lang === 'tr' ? tab.extraTr : tab.extraEn"></p>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Terminal footer -->
+        <div class="border-t border-white/[0.06] px-5 py-3 flex items-center justify-between">
+          <span class="text-[11px] text-neutral-600 font-mono">
+            <span x-show="lang==='tr'">Bu veriler fake — API gerekmez</span>
+            <span x-show="lang==='en'">This data is fake — no API required</span>
+          </span>
+          <a href="#pricing" class="text-xs font-medium text-gain hover:text-gain/80 transition-colors flex items-center gap-1">
+            <span x-show="lang==='tr'">Kendi verini bağla →</span>
+            <span x-show="lang==='en'">Connect your data →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep max-w-5xl mx-auto"></div>
+
+  <!-- ═══════════════════ WHO IS THIS NOT FOR ═══════════════════ -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-2xl mx-auto px-5">
+      <h2 class="text-xl md:text-2xl font-bold text-white tracking-tight mb-8 text-center">
+        <span x-show="lang==='tr'">Bu kimin için?</span>
+        <span x-show="lang==='en'">Who is this for?</span>
+      </h2>
+      <div class="space-y-3">
+        <!-- NOT for -->
+        <div class="flex items-start gap-3 bg-loss/[0.04] border border-loss/10 rounded-xl px-4 py-3.5">
+          <span class="text-loss text-sm mt-0.5">✕</span>
+          <p class="text-sm text-neutral-300">
+            <span x-show="lang==='tr'">Ayda 2–3 trade yapıyorsan bu sana göre değil. Yeterli verin yok.</span>
+            <span x-show="lang==='en'">If you only make 2–3 trades a month, this isn't for you. Not enough data.</span>
+          </p>
+        </div>
+        <div class="flex items-start gap-3 bg-loss/[0.04] border border-loss/10 rounded-xl px-4 py-3.5">
+          <span class="text-loss text-sm mt-0.5">✕</span>
+          <p class="text-sm text-neutral-300">
+            <span x-show="lang==='tr'">Spot alım-satım yapıyorsan şu an Futures trader'larına özel.</span>
+            <span x-show="lang==='en'">If you trade spot only — this is currently Futures-only.</span>
+          </p>
+        </div>
+        <!-- FOR -->
+        <div class="flex items-start gap-3 bg-gain/[0.04] border border-gain/10 rounded-xl px-4 py-3.5">
+          <span class="text-gain text-sm mt-0.5">✓</span>
+          <p class="text-sm text-neutral-300">
+            <span x-show="lang==='tr'">Aktif Futures trader'san, haftada 10+ işlem açıyorsan ve nerede hata yaptığını bilmiyorsan — <span class="text-white font-medium">bu senin için.</span></span>
+            <span x-show="lang==='en'">If you're an active Futures trader, 10+ trades/week, and don't know where you're going wrong — <span class="text-white font-medium">this is for you.</span></span>
+          </p>
+        </div>
+        <div class="flex items-start gap-3 bg-gain/[0.04] border border-gain/10 rounded-xl px-4 py-3.5">
+          <span class="text-gain text-sm mt-0.5">✓</span>
+          <p class="text-sm text-neutral-300">
+            <span x-show="lang==='tr'">Excel'de veya hiç analiz yapmadan devam ediyorsan — <span class="text-white font-medium">bu senin için.</span></span>
+            <span x-show="lang==='en'">If you use Excel or don't analyze at all — <span class="text-white font-medium">this is for you.</span></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep max-w-5xl mx-auto"></div>
+
+  <!-- ═══════════════════ TRUST & API ═══════════════════ -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-3xl mx-auto px-5">
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gain/[0.08] border border-gain/20 mb-5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="text-xs font-medium text-gain">read-only API</span>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-3">
+          <span x-show="lang==='tr'">Paranı görebiliriz. Dokunamayız.</span>
+          <span x-show="lang==='en'">We can see your trades. We can't touch them.</span>
+        </h2>
+        <p class="text-sm text-neutral-500 max-w-md mx-auto">
+          <span x-show="lang==='tr'">Bu Binance'in kendi kısıtlaması — bizim değil. Key'i istediğin zaman Binance panelinden iptal edebilirsin.</span>
+          <span x-show="lang==='en'">This is Binance's own restriction — not ours. You can revoke your key from Binance panel anytime.</span>
+        </p>
+      </div>
+
+      <div class="bg-surface-2 border border-white/[0.06] rounded-2xl overflow-hidden max-w-lg mx-auto">
+        <!-- Allowed -->
+        <div class="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.04]">
+          <div class="w-6 h-6 rounded-full bg-gain/10 flex items-center justify-center flex-shrink-0">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <span class="text-sm text-neutral-300">
+            <span x-show="lang==='tr'">Trade geçmişini okuma</span>
+            <span x-show="lang==='en'">Read trade history</span>
+          </span>
+          <span class="ml-auto text-xs text-gain font-medium">
+            <span x-show="lang==='tr'">izin var</span>
+            <span x-show="lang==='en'">allowed</span>
+          </span>
+        </div>
+        <div class="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.04]">
+          <div class="w-6 h-6 rounded-full bg-gain/10 flex items-center justify-center flex-shrink-0">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <span class="text-sm text-neutral-300">
+            <span x-show="lang==='tr'">PnL hesaplama</span>
+            <span x-show="lang==='en'">Calculate PnL</span>
+          </span>
+          <span class="ml-auto text-xs text-gain font-medium">
+            <span x-show="lang==='tr'">izin var</span>
+            <span x-show="lang==='en'">allowed</span>
+          </span>
+        </div>
+        <!-- Denied -->
+        <div class="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] bg-white/[0.01]">
+          <div class="w-6 h-6 rounded-full bg-loss/10 flex items-center justify-center flex-shrink-0">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </div>
+          <span class="text-sm text-neutral-500">
+            <span x-show="lang==='tr'">Pozisyon açma / kapama</span>
+            <span x-show="lang==='en'">Open / close positions</span>
+          </span>
+          <span class="ml-auto text-xs text-loss/70 font-medium">
+            <span x-show="lang==='tr'">izin yok</span>
+            <span x-show="lang==='en'">blocked</span>
+          </span>
+        </div>
+        <div class="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] bg-white/[0.01]">
+          <div class="w-6 h-6 rounded-full bg-loss/10 flex items-center justify-center flex-shrink-0">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </div>
+          <span class="text-sm text-neutral-500">
+            <span x-show="lang==='tr'">Para çekme / transfer</span>
+            <span x-show="lang==='en'">Withdraw / transfer</span>
+          </span>
+          <span class="ml-auto text-xs text-loss/70 font-medium">
+            <span x-show="lang==='tr'">izin yok</span>
+            <span x-show="lang==='en'">blocked</span>
+          </span>
+        </div>
+        <div class="flex items-center gap-3 px-5 py-3.5 bg-white/[0.01]">
+          <div class="w-6 h-6 rounded-full bg-loss/10 flex items-center justify-center flex-shrink-0">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </div>
+          <span class="text-sm text-neutral-500">
+            <span x-show="lang==='tr'">Emir verme</span>
+            <span x-show="lang==='en'">Place orders</span>
+          </span>
+          <span class="ml-auto text-xs text-loss/70 font-medium">
+            <span x-show="lang==='tr'">izin yok</span>
+            <span x-show="lang==='en'">blocked</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep max-w-5xl mx-auto"></div>
+
+  <!-- ═══════════════════ PRICING & FOMO ═══════════════════ -->
+  <section id="pricing" class="py-16 md:py-24 relative">
+    <div class="absolute inset-0 hero-glow opacity-50"></div>
+    <div class="relative max-w-2xl mx-auto px-5">
+      
+      <div class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-3">
+          <span x-show="lang==='tr'">İlk 30 kullanıcıya lifetime fiyat</span>
+          <span x-show="lang==='en'">Lifetime price for the first 30 users</span>
+        </h2>
+        <p class="text-sm text-neutral-500">
+          <span x-show="lang==='tr'">Slot dolduğunda bu fiyat kapanır. Aylık aboneliğe geçilir.</span>
+          <span x-show="lang==='en'">Once slots fill up, this price is gone. Switches to monthly.</span>
+        </p>
+      </div>
+
+      <!-- Slot counter -->
+      <div class="bg-surface-2 border border-orange-500/20 rounded-2xl p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm font-medium text-orange-400">
+            <span x-show="lang==='tr'">14 / 30 kullanıcı aldı</span>
+            <span x-show="lang==='en'">14 / 30 users claimed</span>
+          </span>
+          <span class="text-xs text-neutral-500">
+            <span x-show="lang==='tr'">16 slot kaldı</span>
+            <span x-show="lang==='en'">16 slots left</span>
+          </span>
+        </div>
+        <div class="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden">
+          <div class="progress-fill h-full rounded-full" style="width: 47%"></div>
+        </div>
+        <p class="text-[11px] text-neutral-600 mt-3">
+          <span x-show="lang==='tr'">Lifetime alanlar fiyat değişiminden etkilenmez.</span>
+          <span x-show="lang==='en'">Lifetime users are unaffected by future price changes.</span>
+        </p>
+      </div>
+
+      <!-- Pricing cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- After launch -->
+        <div class="bg-surface-2 border border-white/[0.06] rounded-2xl p-6">
+          <p class="text-xs text-neutral-500 mb-1">
+            <span x-show="lang==='tr'">launch sonrası</span>
+            <span x-show="lang==='en'">after launch</span>
+          </p>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-neutral-400 font-mono">$9</span>
+            <span class="text-sm text-neutral-500">/
+              <span x-show="lang==='tr'">ay</span>
+              <span x-show="lang==='en'">mo</span>
+            </span>
+          </div>
+          <p class="text-xs text-neutral-600 mt-2">
+            <span x-show="lang==='tr'">= yılda $108</span>
+            <span x-show="lang==='en'">= $108/year</span>
+          </p>
+        </div>
+        <!-- Lifetime -->
+        <div class="bg-surface-2 border border-gain/30 rounded-2xl p-6 glow-green-sm relative overflow-hidden">
+          <div class="absolute top-3 right-3">
+            <span class="text-[10px] font-semibold bg-gain/10 text-gain px-2.5 py-1 rounded-full border border-gain/20">
+              <span x-show="lang==='tr'">şu an</span>
+              <span x-show="lang==='en'">now</span>
+            </span>
+          </div>
+          <p class="text-xs text-gain font-medium mb-1">
+            <span x-show="lang==='tr'">ilk 30 kullanıcı</span>
+            <span x-show="lang==='en'">first 30 users</span>
+          </p>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-gain font-mono">$59</span>
+          </div>
+          <p class="text-xs text-gain/60 mt-2">
+            <span x-show="lang==='tr'">lifetime · bir kez öde · bitti</span>
+            <span x-show="lang==='en'">lifetime · pay once · done</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Pre-sale argument -->
+      <div class="bg-surface-2 border border-white/[0.06] rounded-2xl p-6 mt-6">
+        <p class="text-sm text-neutral-400 leading-relaxed">
+          <span x-show="lang==='tr'">Son 1 ayda $200+ kaybettiysen, bu tool kendini zaten amorti eder. Ürün beta — bazı şeyler ham. Ama temel analiz çalışıyor: trade geçmişini bağla, neden zarar ettiğini 30 saniyede gör. <span class="text-white">Neden şimdi? Çünkü her ay geçen aynı hatayı tekrarlıyorsun.</span> $59'ın maliyeti değil, bilmemenin maliyeti yüksek.</span>
+          <span x-show="lang==='en'">If you lost $200+ last month, this tool pays for itself. It's beta — some things are rough. But the core analysis works: connect your trade history, see why you're losing in 30 seconds. <span class="text-white">Why now? Because every month you repeat the same mistakes.</span> The cost isn't $59 — the cost is not knowing.</span>
+        </p>
+      </div>
+
+      <!-- Final CTA -->
+      <div class="mt-8 text-center">
+        <a href="#" class="btn-glow inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gain text-surface-0 text-sm font-semibold">
+          <span x-show="lang==='tr'">Lifetime Erişim Al — $59 →</span>
+          <span x-show="lang==='en'">Get Lifetime Access — $59 →</span>
+        </a>
+        <p class="text-[11px] text-neutral-600 mt-3">
+          <span x-show="lang==='tr'">Ödeme sonrası anında erişim. Sorularını DM'den sor.</span>
+          <span x-show="lang==='en'">Instant access after payment. DM for questions.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep max-w-5xl mx-auto"></div>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="py-10">
+    <div class="max-w-4xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-6 h-6 rounded-md bg-gain/10 border border-gain/20 flex items-center justify-center">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>
+        </div>
+        <span class="text-sm text-neutral-500">TradePainkiller</span>
+      </div>
+      <div class="flex items-center gap-6 text-xs text-neutral-600">
+        <a href="#" class="hover:text-neutral-400 transition-colors">Discord</a>
+        <a href="#" class="hover:text-neutral-400 transition-colors">Twitter</a>
+        <span>
+          <span x-show="lang==='tr'">© 2026 — Binance ile bağlantısı yoktur</span>
+          <span x-show="lang==='en'">© 2026 — Not affiliated with Binance</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════ ALPINE DATA ═══════════════════ -->
+  <script>
+    function app() {
+      return {
+        lang: 'tr',
+        activeDemo: 0,
+        demoTabs: [
+          {
+            icon: '🌙',
+            tr: 'Gece Kayıpları',
+            en: 'Night Losses',
+            titleTr: 'Gece Trade Analizi',
+            titleEn: 'Night Trading Analysis',
+            insightClass: 'insight-red',
+            titleColor: 'text-red-400',
+            headlineTr: 'Gece 23:00–02:00: 31 işlem, %74\'ü zarar — toplam: -$412',
+            headlineEn: 'Night 23:00–02:00: 31 trades, 74% losses — total: -$412',
+            bodyTr: 'Gündüz aynı strateji: +$187. Gece trade\'lerini kesseydin bu ay +$187\'de kapardın. Fark: $599. Sadece saat.',
+            bodyEn: 'Same strategy during the day: +$187. Cut night trades and you\'d close this month at +$187. Difference: $599. Just timing.',
+            extraTr: 'Gece hacim düşer, spread açılır. Yorgunken trade etmek stratejini değil, yargını bozar.',
+            extraEn: 'Volume drops at night, spreads widen. Trading tired doesn\'t break your strategy — it breaks your judgment.',
+          },
+          {
+            icon: '⚖️',
+            tr: 'R/R Hatası',
+            en: 'R/R Imbalance',
+            titleTr: 'Risk/Reward Analizi',
+            titleEn: 'Risk/Reward Analysis',
+            insightClass: 'insight-amber',
+            titleColor: 'text-amber-400',
+            headlineTr: 'Ortalama win $18, ortalama loss $34 — R/R oranın: 0.53',
+            headlineEn: 'Average win $18, average loss $34 — R/R ratio: 0.53',
+            bodyTr: '%51 winrate ile kâr için minimum 0.95 R/R gerekiyor. Sen 0.53 ile oynuyorsun. Winrate\'ini %65 yapsan da bu R/R ile zarar edersin.',
+            bodyEn: 'With 51% winrate, you need minimum 0.95 R/R to profit. You\'re playing at 0.53. Even 65% winrate loses money at this R/R.',
+            extraTr: 'PnL ekranı sadece son kapanışı gösterir. R/R oranını göstermez. Kazandığını sanıyorsun — matematik başka diyor.',
+            extraEn: 'The PnL screen only shows last close. It doesn\'t show your R/R ratio. You think you\'re winning — math says otherwise.',
+          },
+          {
+            icon: '🔥',
+            tr: 'Revenge Trade',
+            en: 'Revenge Trading',
+            titleTr: 'Revenge Trading Pattern',
+            titleEn: 'Revenge Trading Pattern',
+            insightClass: 'insight-purple',
+            titleColor: 'text-purple-400',
+            headlineTr: 'Büyük loss sonrası pozisyon büyüttüğün 9 işlemde toplam: -$267',
+            headlineEn: '9 trades where you sized up after a big loss — total: -$267',
+            bodyTr: '$50+ zarar eden 12 işlem var. 9\'unun hemen ardından büyütülmüş pozisyon açılmış. 7\'si de zarar. Revenge trading pattern\'i net.',
+            bodyEn: '12 trades lost $50+. After 9 of them, you opened larger positions. 7 also lost. Clear revenge trading pattern.',
+            extraTr: 'Büyük loss sonrası "geri kazanayım" dürtüsü pozisyon boyutunu artırır. Veri gösteriyor: bu dürtü her seferinde seni daha çok batırıyor.',
+            extraEn: 'The "win it back" urge after a big loss increases position size. Data shows: this urge sinks you deeper every time.',
+          },
+          {
+            icon: '🎯',
+            tr: 'Likidite Avı',
+            en: 'Liquidity Hunt',
+            titleTr: 'Likidite Avı Pattern',
+            titleEn: 'Liquidity Hunt Pattern',
+            insightClass: 'insight-red',
+            titleColor: 'text-red-400',
+            headlineTr: 'Pozisyon açtığında fiyat sıfırı okurken geri döndü — 8 işlemde bu pattern: toplam -$318',
+            headlineEn: 'Price reversed at round numbers after your entry — this pattern in 8 trades: total -$318',
+            bodyTr: 'Son 30 günde round number\'ların (x000, x500) 10–15 pip altına koyduğun 8 stop\'ın 7\'si tetiklendi. Ortalama tetiklenme süresi: 4 dakika. Sonra fiyat döndü.',
+            bodyEn: 'In the last 30 days, 7 of 8 stops placed 10–15 pips below round numbers (x000, x500) got hit. Average time to trigger: 4 minutes. Then price reversed.',
+            extraTr: 'Büyük oyuncular likiditeyi toplamak için bilinen SL seviyelerinin hemen altına düşer, sonra döner. Bu rastlantı değil — pattern.',
+            extraEn: 'Big players sweep liquidity below known SL levels, then reverse. This isn\'t coincidence — it\'s a pattern.',
+          },
+          {
+            icon: '📊',
+            tr: 'Funding Rate',
+            en: 'Funding Rate',
+            titleTr: 'Funding Rate Analizi',
+            titleEn: 'Funding Rate Analysis',
+            insightClass: 'insight-amber',
+            titleColor: 'text-amber-400',
+            headlineTr: 'Funding rate negatif olduğu 6 saatte açtığın 14 long: -$231',
+            headlineEn: '14 longs opened during 6 hours of negative funding: -$231',
+            bodyTr: 'Aynı hafta funding pozitif saatlerdeki long\'ların ortalama karı: +$28. Negatif funding\'de long açmak, rüzgara karşı kürek çekmek.',
+            bodyEn: 'Same week, longs during positive funding averaged: +$28. Going long on negative funding is rowing against the wind.',
+            extraTr: 'Funding rate sana her 8 saatte bir pozisyon tutma maliyeti söylüyor. Sen bunu okumuyorsun. 6 saatin 6\'sında rüzgar sana karşıydı.',
+            extraEn: 'Funding rate tells you the cost of holding a position every 8 hours. You\'re not reading it. All 6 hours, the wind was against you.',
+          },
+        ]
+      }
+    }
+  </script>
+</body>
+</html>
