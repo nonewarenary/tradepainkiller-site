@@ -5,6 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TradePainkiller — Neden Zarar Ettiğini 30 Saniyede Gör</title>
   <meta name="description" content="Binance Futures trade verilerini analiz et. Gece kayıpları, revenge trading, bozuk R/R oranları — hepsini 30 saniyede gör.">
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TradePainkiller — Winrate'in yüksek ama hâlâ zarar ediyorsun. Neden?">
+  <meta property="og:description" content="Binance Futures trade verilerini bağla, neden zarar ettiğini 30 saniyede gör. Gece kayıpları, revenge trading, bozuk R/R — hepsi görünür.">
+  <meta property="og:url" content="https://tradepainkiller.com">
+  <meta property="og:site_name" content="TradePainkiller">
+  <!-- og:image buraya eklenecek — 1200x630 boyutunda bir görsel hazırladığında URL'yi güncelle -->
+  <!-- <meta property="og:image" content="https://tradepainkiller.com/og-image.png"> -->
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TradePainkiller — Winrate'in yüksek ama hâlâ zarar ediyorsun. Neden?">
+  <meta name="twitter:description" content="Binance Futures trade verilerini bağla, neden zarar ettiğini 30 saniyede gör.">
+  <!-- <meta name="twitter:image" content="https://tradepainkiller.com/og-image.png"> -->
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,6 +51,9 @@
     }
   </script>
   <style>
+    /* x-cloak fix — Alpine yüklenmeden önce çift dil gösterimini engeller */
+    [x-cloak] { display: none !important; }
+
     * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     html { background: #050505; }
     body { background: #050505; color: #e5e5e5; }
@@ -175,19 +194,21 @@
       </h1>
 
       <p class="fade-up delay-3 text-base md:text-lg text-neutral-400 max-w-xl mx-auto mb-10 leading-relaxed">
-        <span x-show="lang==='tr'">Binance Futures'ta neden zarar ettiğini 30 saniyede gör.<br>Muhtemelen yanlış saatlerde trade ediyorsun. Kanıtlayalım.</span>
-        <span x-show="lang==='en'">See why you're losing on Binance Futures in 30 seconds.<br>You're probably trading at the wrong hours. Let's prove it.</span>
+        <span x-show="lang==='tr'">Binance Futures verilerini bağla, neden zarar ettiğini 30 saniyede gör.<br>Gece kayıpları, revenge trading, bozuk R/R — hepsi görünür hale gelir.</span>
+        <span x-show="lang==='en'">Connect your Binance Futures data, see why you're losing in 30 seconds.<br>Night losses, revenge trading, broken R/R — all become visible.</span>
       </p>
 
       <div class="fade-up delay-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="#demo" class="group px-6 py-3 rounded-xl border border-white/10 hover:border-white/20 transition-all text-sm font-medium text-neutral-300 hover:text-white flex items-center gap-2">
+        <!-- PRIMARY: Demo (çalışan şey) -->
+        <a href="#demo" class="btn-glow px-7 py-3 rounded-xl bg-gain text-surface-0 text-sm font-semibold flex items-center gap-2">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span x-show="lang==='tr'">Fake Veriyle Demo Gör</span>
-          <span x-show="lang==='en'">See Demo with Fake Data</span>
+          <span x-show="lang==='tr'">Örnek Analizi Gör →</span>
+          <span x-show="lang==='en'">See Sample Analysis →</span>
         </a>
-        <a href="#pricing" class="btn-glow px-7 py-3 rounded-xl bg-gain text-surface-0 text-sm font-semibold flex items-center gap-2">
-          <span x-show="lang==='tr'">Kendi Verinle Dene →</span>
-          <span x-show="lang==='en'">Try with Your Data →</span>
+        <!-- SECONDARY: Satın alma -->
+        <a href="#pricing" class="group px-6 py-3 rounded-xl border border-white/10 hover:border-white/20 transition-all text-sm font-medium text-neutral-300 hover:text-white flex items-center gap-2">
+          <span x-show="lang==='tr'">Lifetime Erişim — $39</span>
+          <span x-show="lang==='en'">Lifetime Access — $39</span>
         </a>
       </div>
 
@@ -315,8 +336,8 @@
         <!-- Terminal footer -->
         <div class="border-t border-white/[0.06] px-5 py-3 flex items-center justify-between">
           <span class="text-[11px] text-neutral-600 font-mono">
-            <span x-show="lang==='tr'">Bu veriler fake — API gerekmez</span>
-            <span x-show="lang==='en'">This data is fake — no API required</span>
+            <span x-show="lang==='tr'">Örnek veri — gerçek trader pattern'lerinden türetildi</span>
+            <span x-show="lang==='en'">Sample data — derived from real trader patterns</span>
           </span>
           <a href="#pricing" class="text-xs font-medium text-gain hover:text-gain/80 transition-colors flex items-center gap-1">
             <span x-show="lang==='tr'">Kendi verini bağla →</span>
@@ -465,6 +486,33 @@
 
   <div class="sep max-w-5xl mx-auto"></div>
 
+  <!-- ═══════════════════ FOUNDER STORY ═══════════════════ -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-2xl mx-auto px-5">
+      <div class="bg-surface-2 border border-white/[0.06] rounded-2xl p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-full bg-gain/10 border border-gain/20 flex items-center justify-center text-sm">👤</div>
+          <div>
+            <p class="text-sm font-medium text-white">
+              <span x-show="lang==='tr'">Kurucu</span>
+              <span x-show="lang==='en'">Founder</span>
+            </p>
+            <p class="text-xs text-neutral-500">
+              <span x-show="lang==='tr'">aktif Futures trader</span>
+              <span x-show="lang==='en'">active Futures trader</span>
+            </p>
+          </div>
+        </div>
+        <p class="text-sm text-neutral-400 leading-relaxed">
+          <span x-show="lang==='tr'">3 hafta boyunca Binance Futures verilerimi Excel'de analiz ettim. Export, formül, saatler. Bulduğum şey: gece trade'lerimde sürekli zarar ediyorum, R/R oranım bozuk, ve büyük kayıptan sonra pozisyon büyütüyorum. <span class="text-white">Bu pattern'leri görmem saatler aldı. Aynı şeyi 30 saniyede gösteren bir araç olmadığı için kendim yazdım.</span> Ürün beta — bazı şeyler ham. Ama temel analiz çalışıyor.</span>
+          <span x-show="lang==='en'">I spent 3 weeks analyzing my Binance Futures data in Excel. Exports, formulas, hours of work. What I found: I was consistently losing on night trades, my R/R ratio was broken, and I was sizing up after big losses. <span class="text-white">Seeing these patterns took hours. I built this tool because nothing showed them in 30 seconds.</span> It's beta — some things are rough. But the core analysis works.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep max-w-5xl mx-auto"></div>
+
   <!-- ═══════════════════ PRICING & FOMO ═══════════════════ -->
   <section id="pricing" class="py-16 md:py-24 relative">
     <div class="absolute inset-0 hero-glow opacity-50"></div>
@@ -481,20 +529,20 @@
         </p>
       </div>
 
-      <!-- Slot counter -->
+      <!-- Slot counter — GERÇEK SAYIYLA BAŞLIYOR -->
       <div class="bg-surface-2 border border-orange-500/20 rounded-2xl p-6 mb-6">
         <div class="flex items-center justify-between mb-3">
           <span class="text-sm font-medium text-orange-400">
-            <span x-show="lang==='tr'">14 / 30 kullanıcı aldı</span>
-            <span x-show="lang==='en'">14 / 30 users claimed</span>
+            <span x-show="lang==='tr'">0 / 30 kullanıcı aldı</span>
+            <span x-show="lang==='en'">0 / 30 users claimed</span>
           </span>
           <span class="text-xs text-neutral-500">
-            <span x-show="lang==='tr'">16 slot kaldı</span>
-            <span x-show="lang==='en'">16 slots left</span>
+            <span x-show="lang==='tr'">30 slot açık</span>
+            <span x-show="lang==='en'">30 slots open</span>
           </span>
         </div>
         <div class="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden">
-          <div class="progress-fill h-full rounded-full" style="width: 47%"></div>
+          <div class="progress-fill h-full rounded-full" style="width: 0%"></div>
         </div>
         <p class="text-[11px] text-neutral-600 mt-3">
           <span x-show="lang==='tr'">Lifetime alanlar fiyat değişiminden etkilenmez.</span>
@@ -511,15 +559,15 @@
             <span x-show="lang==='en'">after launch</span>
           </p>
           <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-neutral-400 font-mono">$9</span>
+            <span class="text-3xl font-bold text-neutral-400 font-mono">$7</span>
             <span class="text-sm text-neutral-500">/
               <span x-show="lang==='tr'">ay</span>
               <span x-show="lang==='en'">mo</span>
             </span>
           </div>
           <p class="text-xs text-neutral-600 mt-2">
-            <span x-show="lang==='tr'">= yılda $108</span>
-            <span x-show="lang==='en'">= $108/year</span>
+            <span x-show="lang==='tr'">= yılda $84</span>
+            <span x-show="lang==='en'">= $84/year</span>
           </p>
         </div>
         <!-- Lifetime -->
@@ -535,7 +583,7 @@
             <span x-show="lang==='en'">first 30 users</span>
           </p>
           <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-gain font-mono">$59</span>
+            <span class="text-3xl font-bold text-gain font-mono">$39</span>
           </div>
           <p class="text-xs text-gain/60 mt-2">
             <span x-show="lang==='tr'">lifetime · bir kez öde · bitti</span>
@@ -547,16 +595,16 @@
       <!-- Pre-sale argument -->
       <div class="bg-surface-2 border border-white/[0.06] rounded-2xl p-6 mt-6">
         <p class="text-sm text-neutral-400 leading-relaxed">
-          <span x-show="lang==='tr'">Son 1 ayda $200+ kaybettiysen, bu tool kendini zaten amorti eder. Ürün beta — bazı şeyler ham. Ama temel analiz çalışıyor: trade geçmişini bağla, neden zarar ettiğini 30 saniyede gör. <span class="text-white">Neden şimdi? Çünkü her ay geçen aynı hatayı tekrarlıyorsun.</span> $59'ın maliyeti değil, bilmemenin maliyeti yüksek.</span>
-          <span x-show="lang==='en'">If you lost $200+ last month, this tool pays for itself. It's beta — some things are rough. But the core analysis works: connect your trade history, see why you're losing in 30 seconds. <span class="text-white">Why now? Because every month you repeat the same mistakes.</span> The cost isn't $59 — the cost is not knowing.</span>
+          <span x-show="lang==='tr'">Son 1 ayda $200+ kaybettiysen, bu tool kendini zaten amorti eder. Ürün beta — bazı şeyler ham. Ama temel analiz çalışıyor: trade geçmişini bağla, neden zarar ettiğini 30 saniyede gör. <span class="text-white">Neden şimdi? Çünkü her ay geçen aynı hatayı tekrarlıyorsun.</span> $39'ın maliyeti değil, bilmemenin maliyeti yüksek.</span>
+          <span x-show="lang==='en'">If you lost $200+ last month, this tool pays for itself. It's beta — some things are rough. But the core analysis works: connect your trade history, see why you're losing in 30 seconds. <span class="text-white">Why now? Because every month you repeat the same mistakes.</span> The cost isn't $39 — the cost is not knowing.</span>
         </p>
       </div>
 
       <!-- Final CTA -->
       <div class="mt-8 text-center">
         <a href="#" class="btn-glow inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gain text-surface-0 text-sm font-semibold">
-          <span x-show="lang==='tr'">Lifetime Erişim Al — $59 →</span>
-          <span x-show="lang==='en'">Get Lifetime Access — $59 →</span>
+          <span x-show="lang==='tr'">Lifetime Erişim Al — $39 →</span>
+          <span x-show="lang==='en'">Get Lifetime Access — $39 →</span>
         </a>
         <p class="text-[11px] text-neutral-600 mt-3">
           <span x-show="lang==='tr'">Ödeme sonrası anında erişim. Sorularını DM'den sor.</span>
@@ -578,8 +626,10 @@
         <span class="text-sm text-neutral-500">TradePainkiller</span>
       </div>
       <div class="flex items-center gap-6 text-xs text-neutral-600">
-        <a href="#" class="hover:text-neutral-400 transition-colors">Discord</a>
-        <a href="#" class="hover:text-neutral-400 transition-colors">Twitter</a>
+        <!-- Sosyal linkleri hesapları açtığında gerçek URL'lerle güncelle -->
+        <a href="#" class="hover:text-neutral-400 transition-colors">X (Twitter)</a>
+        <a href="#" class="hover:text-neutral-400 transition-colors">Reddit</a>
+        <a href="#" class="hover:text-neutral-400 transition-colors">Telegram</a>
         <span>
           <span x-show="lang==='tr'">© 2026 — Binance ile bağlantısı yoktur</span>
           <span x-show="lang==='en'">© 2026 — Not affiliated with Binance</span>
