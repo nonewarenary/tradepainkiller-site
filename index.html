@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TradePainkiller — Neden Zarar Ettiğini 30 Saniyede Gör</title>
-  <meta name="description" content="Binance Futures trade verilerini analiz et. Gece kayıpları, revenge trading, bozuk R/R oranları — hepsini 30 saniyede gör.">
+  <meta name="description" content="Binance Futures için analiz aracı: gece kayıpları, revenge trading, bozuk R/R oranları. Pre-sale — ilk 30 kullanıcıya $39 lifetime, MVP 4-6 hafta içinde.">
   
   <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="TradePainkiller — Winrate'in yüksek ama hâlâ zarar ediyorsun. Neden?">
-  <meta property="og:description" content="Binance Futures trade verilerini bağla, neden zarar ettiğini 30 saniyede gör. Gece kayıpları, revenge trading, bozuk R/R — hepsi görünür.">
+  <meta property="og:description" content="Binance Futures için analiz aracı. Pre-sale açık: ilk 30 kullanıcıya $39 lifetime erişim, MVP 4-6 hafta içinde teslim. Zamanında gelmezse iade garantisi.">
   <meta property="og:url" content="https://tradepainkiller.com">
   <meta property="og:site_name" content="TradePainkiller">
   <!-- og:image buraya eklenecek — 1200x630 boyutunda bir görsel hazırladığında URL'yi güncelle -->
@@ -18,11 +18,12 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="TradePainkiller — Winrate'in yüksek ama hâlâ zarar ediyorsun. Neden?">
-  <meta name="twitter:description" content="Binance Futures trade verilerini bağla, neden zarar ettiğini 30 saniyede gör.">
+  <meta name="twitter:description" content="Binance Futures için analiz aracı. Pre-sale: ilk 30 kullanıcıya $39 lifetime, MVP 4-6 hafta içinde.">
   <!-- <meta name="twitter:image" content="https://tradepainkiller.com/og-image.png"> -->
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://app.lemonsqueezy.com/js/lemon.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -184,8 +185,8 @@
       
       <div class="fade-up delay-1 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/8 bg-white/[0.03] mb-8">
         <span class="w-1.5 h-1.5 rounded-full bg-gain animate-pulse"></span>
-        <span class="text-xs text-neutral-400 font-medium" x-show="lang==='tr'">Binance Futures trader'ları için</span>
-        <span class="text-xs text-neutral-400 font-medium" x-show="lang==='en'">Built for Binance Futures traders</span>
+        <span class="text-xs text-neutral-400 font-medium" x-show="lang==='tr'">Pre-sale · MVP 4-6 hafta içinde</span>
+        <span class="text-xs text-neutral-400 font-medium" x-show="lang==='en'">Pre-sale · MVP shipping in 4-6 weeks</span>
       </div>
 
       <h1 class="fade-up delay-2 text-4xl md:text-[3.4rem] md:leading-[1.12] font-bold tracking-tight text-gradient mb-6">
@@ -194,8 +195,8 @@
       </h1>
 
       <p class="fade-up delay-3 text-base md:text-lg text-neutral-400 max-w-xl mx-auto mb-10 leading-relaxed">
-        <span x-show="lang==='tr'">Binance Futures verilerini bağla, neden zarar ettiğini 30 saniyede gör.<br>Gece kayıpları, revenge trading, bozuk R/R — hepsi görünür hale gelir.</span>
-        <span x-show="lang==='en'">Connect your Binance Futures data, see why you're losing in 30 seconds.<br>Night losses, revenge trading, broken R/R — all become visible.</span>
+        <span x-show="lang==='tr'">Neden zarar ettiğini gösterecek Binance Futures analiz aracı.<br>Gece kayıpları, revenge trading, bozuk R/R — hepsi görünür hale gelecek.<br><span class="text-neutral-500 text-sm">Tool 4-6 hafta içinde hazır · ilk 30 kullanıcıya lifetime erişim</span></span>
+        <span x-show="lang==='en'">A Binance Futures analyzer that shows why you're losing.<br>Night losses, revenge trading, broken R/R — all will become visible.<br><span class="text-neutral-500 text-sm">Shipping in 4-6 weeks · lifetime access for first 30 users</span></span>
       </p>
 
       <div class="fade-up delay-4 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -213,8 +214,8 @@
       </div>
 
       <p class="fade-up delay-5 mt-5 text-[11px] text-neutral-500">
-        <span x-show="lang==='tr'">Read-only API · İşlem yetkisi yok · 30 saniye kurulum</span>
-        <span x-show="lang==='en'">Read-only API · No trading permission · 30 second setup</span>
+        <span x-show="lang==='tr'">Read-only API · İşlem yetkisi yok · MVP gelmezse %100 iade</span>
+        <span x-show="lang==='en'">Read-only API · No trading permission · 100% refund if MVP doesn't ship</span>
       </p>
     </div>
   </section>
@@ -223,47 +224,47 @@
   <section class="py-16 md:py-24 relative">
     <div class="max-w-4xl mx-auto px-5">
       <p class="text-center text-xs font-medium text-neutral-500 uppercase tracking-widest mb-10">
-        <span x-show="lang==='tr'">Gerçek bir trader'ın 30 günlük verisi</span>
-        <span x-show="lang==='en'">Real data from a trader's last 30 days</span>
+        <span x-show="lang==='tr'">Örnek bir trader'ın 30 günlük analizi</span>
+        <span x-show="lang==='en'">30-day analysis of a sample trader</span>
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
         <!-- Stat 1 -->
         <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-loss/20 transition-all glow-red">
-          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">-$412</div>
+          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">-$403</div>
           <div class="text-sm text-neutral-500 mt-2">
             <span x-show="lang==='tr'">gece trade kaybı</span>
             <span x-show="lang==='en'">night trade losses</span>
           </div>
-          <div class="text-[11px] text-neutral-600 mt-1">23:00 – 02:00</div>
+          <div class="text-[11px] text-neutral-600 mt-1">23:00 – 03:00</div>
         </div>
         <!-- Stat 2 -->
         <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-yellow-500/20 transition-all">
-          <div class="text-4xl md:text-5xl font-bold text-white font-mono tracking-tight">0.53</div>
+          <div class="text-4xl md:text-5xl font-bold text-white font-mono tracking-tight">0.30</div>
           <div class="text-sm text-neutral-500 mt-2">
             <span x-show="lang==='tr'">R/R oranın</span>
             <span x-show="lang==='en'">your R/R ratio</span>
           </div>
           <div class="text-[11px] text-neutral-600 mt-1">
-            <span x-show="lang==='tr'">min. 0.95 gerekli</span>
-            <span x-show="lang==='en'">min. 0.95 needed</span>
+            <span x-show="lang==='tr'">breakeven için %77 gerek</span>
+            <span x-show="lang==='en'">needs 77% winrate to breakeven</span>
           </div>
         </div>
         <!-- Stat 3 -->
         <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-loss/20 transition-all glow-red">
-          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">74%</div>
+          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">77%</div>
           <div class="text-sm text-neutral-500 mt-2">
             <span x-show="lang==='tr'">gece zarar oranı</span>
             <span x-show="lang==='en'">night loss rate</span>
           </div>
           <div class="text-[11px] text-neutral-600 mt-1">
-            <span x-show="lang==='tr'">31 işlemden 23'ü</span>
-            <span x-show="lang==='en'">23 out of 31 trades</span>
+            <span x-show="lang==='tr'">47 işlemden 36'sı</span>
+            <span x-show="lang==='en'">36 out of 47 trades</span>
           </div>
         </div>
       </div>
       <p class="text-center text-sm text-neutral-500 mt-6">
-        <span x-show="lang==='tr'">Bu sayılar gerçek bir trader'a ait. API key bağla, <span class="text-white">30 saniyede seninkini gör.</span></span>
-        <span x-show="lang==='en'">These numbers belong to a real trader. Connect your API key, <span class="text-white">see yours in 30 seconds.</span></span>
+        <span x-show="lang==='tr'">Bu sayılar gerçek Binance Futures pattern'lerinden türetilmiş örnek bir trader'a ait. MVP hazır olduğunda, <span class="text-white">kendi verinde bunun aynısını göreceksin.</span></span>
+        <span x-show="lang==='en'">These numbers are from a sample trader derived from real Binance Futures patterns. When MVP ships, <span class="text-white">you'll see yours the same way.</span></span>
       </p>
     </div>
   </section>
@@ -276,12 +277,12 @@
       
       <div class="text-center mb-12">
         <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-3">
-          <span x-show="lang==='tr'">emre_futures'ın 30 günlük analizi</span>
-          <span x-show="lang==='en'">emre_futures's 30-day analysis</span>
+          <span x-show="lang==='tr'">Örnek trader'ın 30 günlük analizi</span>
+          <span x-show="lang==='en'">Sample trader's 30-day analysis</span>
         </h2>
         <p class="text-sm text-neutral-500">
-          <span x-show="lang==='tr'">143 işlem · %51 winrate · <span class="text-loss">net: -$550</span> · $4,200 ile başladı, $3,650 ile bitirdi</span>
-          <span x-show="lang==='en'">143 trades · 51% winrate · <span class="text-loss">net: -$550</span> · Started $4,200, ended $3,650</span>
+          <span x-show="lang==='tr'">148 işlem · %45 winrate · <span class="text-loss">net: -$772</span> · $3,500 ile başladı, $2,728 ile bitirdi</span>
+          <span x-show="lang==='en'">148 trades · 45% winrate · <span class="text-loss">net: -$772</span> · Started $3,500, ended $2,728</span>
         </p>
       </div>
 
@@ -294,7 +295,7 @@
             <div class="terminal-dot bg-[#febc2e]"></div>
             <div class="terminal-dot bg-[#28c840]"></div>
           </div>
-          <span class="text-[11px] text-neutral-600 font-mono">trade-analyzer — emre_futures</span>
+          <span class="text-[11px] text-neutral-600 font-mono">trade-analyzer — sample_trader</span>
           <div class="w-16"></div>
         </div>
 
@@ -309,6 +310,10 @@
               >
                 <span x-text="tab.icon" class="text-sm"></span>
                 <span x-text="lang === 'tr' ? tab.tr : tab.en"></span>
+                <span x-show="tab.soon" class="ml-auto text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/20">
+                  <span x-show="lang==='tr'">yakında</span>
+                  <span x-show="lang==='en'">soon</span>
+                </span>
               </button>
             </template>
           </div>
@@ -317,9 +322,19 @@
           <div class="flex-1 p-5 md:p-7 min-h-[320px]">
             <template x-for="(tab, i) in demoTabs" :key="'c'+i">
               <div x-show="activeDemo === i" x-transition.opacity.duration.200ms>
-                <div class="flex items-center gap-2 mb-4">
+                <div class="flex items-center gap-2 mb-4 flex-wrap">
                   <span class="text-lg" x-text="tab.icon"></span>
                   <h3 class="text-base font-semibold text-white" x-text="lang === 'tr' ? tab.titleTr : tab.titleEn"></h3>
+                  <span x-show="tab.soon" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/20">
+                    <span x-show="lang==='tr'">v1.1'de geliyor</span>
+                    <span x-show="lang==='en'">coming in v1.1</span>
+                  </span>
+                </div>
+                <div x-show="tab.soon" class="rounded-lg px-3 py-2 mb-3 bg-blue-500/[0.06] border border-blue-500/15">
+                  <p class="text-[11px] text-blue-300/80 leading-relaxed">
+                    <span x-show="lang==='tr'">Bu metrik MVP'nin ilk sürümünde yok — v1.1 ile Binance historical price API üzerinden hesaplanacak. Aşağıdaki sayılar örnek trader verisinden türetilmiştir.</span>
+                    <span x-show="lang==='en'">This metric isn't in v1.0 — v1.1 will compute it via Binance historical price API. Numbers below are from sample trader data.</span>
+                  </p>
                 </div>
                 <div class="rounded-xl p-4 mb-4" :class="tab.insightClass">
                   <p class="text-sm font-medium mb-1" :class="tab.titleColor" x-text="lang === 'tr' ? tab.headlineTr : tab.headlineEn"></p>
@@ -340,8 +355,8 @@
             <span x-show="lang==='en'">Sample data — derived from real trader patterns</span>
           </span>
           <a href="#pricing" class="text-xs font-medium text-gain hover:text-gain/80 transition-colors flex items-center gap-1">
-            <span x-show="lang==='tr'">Kendi verini bağla →</span>
-            <span x-show="lang==='en'">Connect your data →</span>
+            <span x-show="lang==='tr'">Erken erişim için slot al →</span>
+            <span x-show="lang==='en'">Get early access slot →</span>
           </a>
         </div>
       </div>
@@ -504,8 +519,8 @@
           </div>
         </div>
         <p class="text-sm text-neutral-400 leading-relaxed">
-          <span x-show="lang==='tr'">3 hafta boyunca Binance Futures verilerimi Excel'de analiz ettim. Export, formül, saatler. Bulduğum şey: gece trade'lerimde sürekli zarar ediyorum, R/R oranım bozuk, ve büyük kayıptan sonra pozisyon büyütüyorum. <span class="text-white">Bu pattern'leri görmem saatler aldı. Aynı şeyi 30 saniyede gösteren bir araç olmadığı için kendim yazdım.</span> Ürün beta — bazı şeyler ham. Ama temel analiz çalışıyor.</span>
-          <span x-show="lang==='en'">I spent 3 weeks analyzing my Binance Futures data in Excel. Exports, formulas, hours of work. What I found: I was consistently losing on night trades, my R/R ratio was broken, and I was sizing up after big losses. <span class="text-white">Seeing these patterns took hours. I built this tool because nothing showed them in 30 seconds.</span> It's beta — some things are rough. But the core analysis works.</span>
+          <span x-show="lang==='tr'">3 hafta boyunca Binance Futures verilerimi Excel'de analiz ettim. Export, formül, saatler. Bulduğum şey: gece trade'lerimde sürekli zarar ediyorum, R/R oranım bozuk, ve büyük kayıptan sonra pozisyon büyütüyorum. <span class="text-white">Bu pattern'leri görmem saatler aldı. Aynı şeyi 30 saniyede gösteren bir araç olmadığı için yazmaya başladım.</span> Şu an prototype aşamasında — ilk 30 kullanıcıyla test edip 4-6 hafta içinde teslim edeceğim. Pre-sale alanların hepsi erken erişim listesinde; söz verdiğim sürede teslim etmezsem tam iade.</span>
+          <span x-show="lang==='en'">I spent 3 weeks analyzing my Binance Futures data in Excel. Exports, formulas, hours of work. What I found: I was consistently losing on night trades, my R/R ratio was broken, and I was sizing up after big losses. <span class="text-white">Seeing these patterns took hours. I started building this because nothing shows them in 30 seconds.</span> Currently in prototype — shipping to the first 30 users in 4-6 weeks. Pre-sale buyers get early access; full refund if I don't ship on time.</span>
         </p>
       </div>
     </div>
@@ -595,20 +610,20 @@
       <!-- Pre-sale argument -->
       <div class="bg-surface-2 border border-white/[0.06] rounded-2xl p-6 mt-6">
         <p class="text-sm text-neutral-400 leading-relaxed">
-          <span x-show="lang==='tr'">Son 1 ayda $200+ kaybettiysen, bu tool kendini zaten amorti eder. Ürün beta — bazı şeyler ham. Ama temel analiz çalışıyor: trade geçmişini bağla, neden zarar ettiğini 30 saniyede gör. <span class="text-white">Neden şimdi? Çünkü her ay geçen aynı hatayı tekrarlıyorsun.</span> $39'ın maliyeti değil, bilmemenin maliyeti yüksek.</span>
-          <span x-show="lang==='en'">If you lost $200+ last month, this tool pays for itself. It's beta — some things are rough. But the core analysis works: connect your trade history, see why you're losing in 30 seconds. <span class="text-white">Why now? Because every month you repeat the same mistakes.</span> The cost isn't $39 — the cost is not knowing.</span>
+          <span x-show="lang==='tr'">Son 1 ayda $200+ kaybettiysen, bu tool kendini zaten amorti eder. Şu an pre-sale: MVP 4-6 hafta içinde hazır olacak. İlk 30 kullanıcı <span class="text-white">lifetime erişim + build süreci boyunca feature input hakkı</span> alır. <span class="text-white">Neden şimdi? Çünkü her ay geçen aynı hatayı tekrarlıyorsun — ve slot dolduğunda bu fiyat kapanır.</span> Söz verdiğim sürede teslim etmezsem %100 iade.</span>
+          <span x-show="lang==='en'">If you lost $200+ last month, this tool pays for itself. This is pre-sale: MVP ships in 4-6 weeks. First 30 users get <span class="text-white">lifetime access + feature input during the build process</span>. <span class="text-white">Why now? Because every month you repeat the same mistakes — and when slots fill, this price is gone.</span> 100% refund if I don't ship on time.</span>
         </p>
       </div>
 
       <!-- Final CTA -->
       <div class="mt-8 text-center">
-        <a href="#" class="btn-glow inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gain text-surface-0 text-sm font-semibold">
+        <a href="https://agenticforge.lemonsqueezy.com/buy/78a0945b-5c40-4bdb-9984-b27323208f97" class="lemonsqueezy-button btn-glow inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gain text-surface-0 text-sm font-semibold">
           <span x-show="lang==='tr'">Lifetime Erişim Al — $39 →</span>
           <span x-show="lang==='en'">Get Lifetime Access — $39 →</span>
         </a>
-        <p class="text-[11px] text-neutral-600 mt-3">
-          <span x-show="lang==='tr'">Ödeme sonrası anında erişim. Sorularını DM'den sor.</span>
-          <span x-show="lang==='en'">Instant access after payment. DM for questions.</span>
+        <p class="text-[11px] text-neutral-600 mt-3 max-w-sm mx-auto leading-relaxed">
+          <span x-show="lang==='tr'">Pre-sale: MVP 4-6 hafta içinde hazır. Ödemen alındığında erken erişim listesine eklenirsin, hazır olduğunda e-posta gelir. Teslim etmezsem %100 iade.</span>
+          <span x-show="lang==='en'">Pre-sale: MVP ships in 4-6 weeks. Payment secures your spot on the early access list — email when ready. 100% refund if I don't ship on time.</span>
         </p>
       </div>
     </div>
@@ -627,9 +642,9 @@
       </div>
       <div class="flex items-center gap-6 text-xs text-neutral-600">
         <!-- Sosyal linkleri hesapları açtığında gerçek URL'lerle güncelle -->
-        <a href="#" class="hover:text-neutral-400 transition-colors">X (Twitter)</a>
-        <a href="#" class="hover:text-neutral-400 transition-colors">Reddit</a>
-        <a href="#" class="hover:text-neutral-400 transition-colors">Telegram</a>
+        <a href="https://x.com/nonewarenary" class="hover:text-neutral-400 transition-colors">X (Twitter)</a>
+        <a href="https://www.reddit.com/user/nonewarenary/" class="hover:text-neutral-400 transition-colors">Reddit</a>
+        <a href="https://t.me/nonewarenary" class="hover:text-neutral-400 transition-colors">Telegram</a>
         <span>
           <span x-show="lang==='tr'">© 2026 — Binance ile bağlantısı yoktur</span>
           <span x-show="lang==='en'">© 2026 — Not affiliated with Binance</span>
@@ -645,6 +660,7 @@
         lang: 'tr',
         activeDemo: 0,
         demoTabs: [
+          // ─── 1. GECE KAYIPLARI ───
           {
             icon: '🌙',
             tr: 'Gece Kayıpları',
@@ -653,13 +669,14 @@
             titleEn: 'Night Trading Analysis',
             insightClass: 'insight-red',
             titleColor: 'text-red-400',
-            headlineTr: 'Gece 23:00–02:00: 31 işlem, %74\'ü zarar — toplam: -$412',
-            headlineEn: 'Night 23:00–02:00: 31 trades, 74% losses — total: -$412',
-            bodyTr: 'Gündüz aynı strateji: +$187. Gece trade\'lerini kesseydin bu ay +$187\'de kapardın. Fark: $599. Sadece saat.',
-            bodyEn: 'Same strategy during the day: +$187. Cut night trades and you\'d close this month at +$187. Difference: $599. Just timing.',
-            extraTr: 'Gece hacim düşer, spread açılır. Yorgunken trade etmek stratejini değil, yargını bozar.',
-            extraEn: 'Volume drops at night, spreads widen. Trading tired doesn\'t break your strategy — it breaks your judgment.',
+            headlineTr: 'Gece 23:00–03:00: 47 işlem, %77\'si zarar — toplam: -$403',
+            headlineEn: 'Night 23:00–03:00: 47 trades, 77% losses — total: -$403',
+            bodyTr: 'Gündüz (11:00–16:00) aynı strateji: 49 işlem, %59 winrate, sadece -$90 zarar. Gece işlemlerini kesseydin bu ay -$369\'da kapardın. Fark: $403. Sadece saat.',
+            bodyEn: 'Same strategy during the day (11:00–16:00): 49 trades, 59% winrate, only -$90 loss. Cut night trades and you\'d close this month at -$369. Difference: $403. Just timing.',
+            extraTr: 'Gece hacim düşer, spread açılır. Yorgunken trade etmek stratejini değil, yargını bozar. Winrate %23\'e düşüyor — kazanan olduğun saatler değil bu saatler.',
+            extraEn: 'Volume drops at night, spreads widen. Trading tired doesn\'t break your strategy — it breaks your judgment. Winrate drops to 23% — these aren\'t your winning hours.',
           },
+          // ─── 2. R/R ORANI ───
           {
             icon: '⚖️',
             tr: 'R/R Hatası',
@@ -668,13 +685,14 @@
             titleEn: 'Risk/Reward Analysis',
             insightClass: 'insight-amber',
             titleColor: 'text-amber-400',
-            headlineTr: 'Ortalama win $18, ortalama loss $34 — R/R oranın: 0.53',
-            headlineEn: 'Average win $18, average loss $34 — R/R ratio: 0.53',
-            bodyTr: '%51 winrate ile kâr için minimum 0.95 R/R gerekiyor. Sen 0.53 ile oynuyorsun. Winrate\'ini %65 yapsan da bu R/R ile zarar edersin.',
-            bodyEn: 'With 51% winrate, you need minimum 0.95 R/R to profit. You\'re playing at 0.53. Even 65% winrate loses money at this R/R.',
-            extraTr: 'PnL ekranı sadece son kapanışı gösterir. R/R oranını göstermez. Kazandığını sanıyorsun — matematik başka diyor.',
-            extraEn: 'The PnL screen only shows last close. It doesn\'t show your R/R ratio. You think you\'re winning — math says otherwise.',
+            headlineTr: 'Ortalama win $3.38, ortalama loss $11.25 — R/R oranın: 0.30',
+            headlineEn: 'Average win $3.38, average loss $11.25 — R/R ratio: 0.30',
+            bodyTr: '%45 winrate ile bu R/R\'da kâr için %77 winrate gerekiyor. Sen %45\'tesin. Winrate\'ini %65\'e çıkarsan bile bu R/R ile zarar etmeye devam edersin.',
+            bodyEn: 'With 45% winrate at this R/R, you need 77% winrate to profit. You\'re at 45%. Even raising it to 65% still loses money with this R/R.',
+            extraTr: 'PnL ekranı sadece son kapanışı gösterir. Kazandığında ne kadar küçük kazandığını, kaybettiğinde ne kadar büyük kaybettiğini göstermez. Matematik tokat gibi.',
+            extraEn: 'The PnL screen only shows closings. It doesn\'t show how little you win vs. how much you lose. The math hits like a slap.',
           },
+          // ─── 3. REVENGE TRADING ───
           {
             icon: '🔥',
             tr: 'Revenge Trade',
@@ -683,42 +701,77 @@
             titleEn: 'Revenge Trading Pattern',
             insightClass: 'insight-purple',
             titleColor: 'text-purple-400',
-            headlineTr: 'Büyük loss sonrası pozisyon büyüttüğün 9 işlemde toplam: -$267',
-            headlineEn: '9 trades where you sized up after a big loss — total: -$267',
-            bodyTr: '$50+ zarar eden 12 işlem var. 9\'unun hemen ardından büyütülmüş pozisyon açılmış. 7\'si de zarar. Revenge trading pattern\'i net.',
-            bodyEn: '12 trades lost $50+. After 9 of them, you opened larger positions. 7 also lost. Clear revenge trading pattern.',
-            extraTr: 'Büyük loss sonrası "geri kazanayım" dürtüsü pozisyon boyutunu artırır. Veri gösteriyor: bu dürtü her seferinde seni daha çok batırıyor.',
-            extraEn: 'The "win it back" urge after a big loss increases position size. Data shows: this urge sinks you deeper every time.',
+            headlineTr: '-$15+ kayıp sonrası 60 dakika içinde açtığın 7 işlemin %71\'i zarar — toplam: -$73',
+            headlineEn: '7 trades opened within 60 min after -$15+ loss — 71% lost, total: -$73',
+            bodyTr: 'Normal işlemlerinde zarar oranın %55. Büyük kaybın hemen ardından bu oran %71\'e fırlıyor. Üstüne pozisyon size\'ını %150 büyütmüşsün. Revenge pattern\'i net.',
+            bodyEn: 'Your normal loss rate is 55%. Right after a big loss it jumps to 71%. And you sized up by 150% on top. Clear revenge pattern.',
+            extraTr: 'Büyük kayıp → "hemen geri alayım" dürtüsü → daha büyük pozisyon → daha büyük kayıp. Veri bu döngüyü yakalıyor. Dürtü seni görünce durur.',
+            extraEn: 'Big loss → "win it back now" urge → bigger position → bigger loss. Data catches this loop. The urge stops once you see it.',
           },
-          {
-            icon: '🎯',
-            tr: 'Likidite Avı',
-            en: 'Liquidity Hunt',
-            titleTr: 'Likidite Avı Pattern',
-            titleEn: 'Liquidity Hunt Pattern',
-            insightClass: 'insight-red',
-            titleColor: 'text-red-400',
-            headlineTr: 'Pozisyon açtığında fiyat sıfırı okurken geri döndü — 8 işlemde bu pattern: toplam -$318',
-            headlineEn: 'Price reversed at round numbers after your entry — this pattern in 8 trades: total -$318',
-            bodyTr: 'Son 30 günde round number\'ların (x000, x500) 10–15 pip altına koyduğun 8 stop\'ın 7\'si tetiklendi. Ortalama tetiklenme süresi: 4 dakika. Sonra fiyat döndü.',
-            bodyEn: 'In the last 30 days, 7 of 8 stops placed 10–15 pips below round numbers (x000, x500) got hit. Average time to trigger: 4 minutes. Then price reversed.',
-            extraTr: 'Büyük oyuncular likiditeyi toplamak için bilinen SL seviyelerinin hemen altına düşer, sonra döner. Bu rastlantı değil — pattern.',
-            extraEn: 'Big players sweep liquidity below known SL levels, then reverse. This isn\'t coincidence — it\'s a pattern.',
-          },
+          // ─── 4. FUNDING RATE ───
           {
             icon: '📊',
-            tr: 'Funding Rate',
-            en: 'Funding Rate',
-            titleTr: 'Funding Rate Analizi',
-            titleEn: 'Funding Rate Analysis',
+            tr: 'Funding Leak',
+            en: 'Funding Leak',
+            titleTr: 'Funding Rate Maliyeti',
+            titleEn: 'Funding Rate Cost',
             insightClass: 'insight-amber',
             titleColor: 'text-amber-400',
-            headlineTr: 'Funding rate negatif olduğu 6 saatte açtığın 14 long: -$231',
-            headlineEn: '14 longs opened during 6 hours of negative funding: -$231',
-            bodyTr: 'Aynı hafta funding pozitif saatlerdeki long\'ların ortalama karı: +$28. Negatif funding\'de long açmak, rüzgara karşı kürek çekmek.',
-            bodyEn: 'Same week, longs during positive funding averaged: +$28. Going long on negative funding is rowing against the wind.',
-            extraTr: 'Funding rate sana her 8 saatte bir pozisyon tutma maliyeti söylüyor. Sen bunu okumuyorsun. 6 saatin 6\'sında rüzgar sana karşıydı.',
-            extraEn: 'Funding rate tells you the cost of holding a position every 8 hours. You\'re not reading it. All 6 hours, the wind was against you.',
+            headlineTr: 'Negatif funding döneminde açtığın 37 long: -$41 funding ödedin — bir kazançlı işlemin kârına eşit',
+            headlineEn: '37 longs during negative funding: -$41 paid — equal to one winning trade\'s profit',
+            bodyTr: 'İşlemlerinin %71\'i long. Long ağırlıklıysan ve funding pozitifse, her 8 saatte bir trader\'lara para ödüyorsun. PnL\'e sessizce işliyor, sen fark etmiyorsun.',
+            bodyEn: 'You\'re long 71% of the time. When you\'re long-heavy and funding is positive, you pay other traders every 8 hours. It quietly hits PnL without you noticing.',
+            extraTr: 'Funding rate perpetual futures\'ın görünmez vergisi. $41 bir kez değil — bu ay, geçen ay, her ay. Pozisyon açmadan önce görmen gereken tek sayı.',
+            extraEn: 'Funding rate is perpetual futures\' invisible tax. $41 isn\'t one-time — this month, last month, every month. The one number to check before opening a position.',
+          },
+          // ─── 5. FEE GERÇEĞİ (YENİ) ───
+          {
+            icon: '💸',
+            tr: 'Komisyon Gerçeği',
+            en: 'Fee Reality',
+            titleTr: 'Toplam Komisyon Yükü',
+            titleEn: 'Total Fee Burden',
+            insightClass: 'insight-red',
+            titleColor: 'text-red-400',
+            headlineTr: 'Bu ay $69 sadece komisyon ödedin — 20 kazançlı işlemin kârına eşit',
+            headlineEn: 'You paid $69 in fees this month — equal to 20 winning trades\' profit',
+            bodyTr: 'Toplam işlem hacmin $98,155. Etkin fee oranın %0.0706 — çünkü taker olarak sık giriyorsun. Maker olsaydın bu rakam yarıya düşerdi. Yılda ~$828 sadece fee.',
+            bodyEn: 'Your total volume was $98,155. Effective fee rate: 0.0706% — because you take liquidity frequently. As a maker, this halves. That\'s ~$828/year in fees alone.',
+            extraTr: 'Fee PnL\'e gömülü, ayrı görünmüyor. Kayıpsız bir ay geçirseydin bile bu $69 cebinde olmayacaktı. Maker/taker oranın tek başına yılda $400 fark yaratıyor.',
+            extraEn: 'Fees hide inside PnL, invisible as a line item. Even a breakeven month would\'ve cost you $69. Your maker/taker ratio alone creates a $400 gap per year.',
+          },
+          // ─── 6. OVER-SIZING (YENİ) ───
+          {
+            icon: '📈',
+            tr: 'Pozisyon Büyütme',
+            en: 'Over-sizing',
+            titleTr: 'Kayıp Sonrası Pozisyon Büyütme',
+            titleEn: 'Sizing Up After Losses',
+            insightClass: 'insight-purple',
+            titleColor: 'text-purple-400',
+            headlineTr: 'Median pozisyon size $500, ama kayıp sonrası 4x\'e çıkıyor — bu pozisyonların %75\'i zarar',
+            headlineEn: 'Median position size $500, but 4x after a loss — 75% of those lose',
+            bodyTr: 'Normal pozisyonlarınla $500\'de oynuyorsun. -$15+ kayıptan sonra 1.5x+ büyütüyorsun, ortalaması $2,000\'e çıkıyor. Bu pozisyonların sadece %25\'i kazançla kapanıyor.',
+            bodyEn: 'You trade at $500 normally. After a -$15+ loss, you size up 1.5x+, averaging $2,000. Only 25% of those close profitably.',
+            extraTr: 'Position sizing rastgele değil — duygusal. Kaybeden hesaplar büyük pozisyonda riske atılıyor, kazanan hesaplar küçükte kalıyor. Ters orantı.',
+            extraEn: 'Position sizing isn\'t random — it\'s emotional. Losing positions get big size, winning ones stay small. Inverse to what would work.',
+          },
+          // ─── 7. MFE / CAPTURE RATIO (YENİ) ───
+          {
+            icon: '🎯',
+            soon: true,
+            tr: 'Masada Bıraktın',
+            en: 'Left on Table',
+            titleTr: 'Kârı Masada Bırakma',
+            titleEn: 'Leaving Profit on the Table',
+            insightClass: 'insight-blue',
+            titleColor: 'text-blue-400',
+            headlineTr: 'Kazançlı işlemlerinde potansiyel kârın %40\'ını alıyorsun — $346 masada kaldı',
+            headlineEn: 'You\'re capturing only 40% of potential profit — $346 left on the table',
+            bodyTr: '67 kazançlı işlemde realize ettiğin: $227. Aynı işlemlerin zirvede olduğu noktada kapatsaydın: $573. Çok erken çıkıyorsun. Win\'ler küçük kalıyor, R/R\'ın bozuluyor.',
+            bodyEn: '67 winning trades realized: $227. If closed at peak: $573. You exit too early. Wins stay small, and your R/R breaks down.',
+            extraTr: 'Capture ratio %40 demek potansiyel kârının %60\'ını görmüyorsun. Aynı entry\'ler, daha geç çıkışlar — R/R\'ın 0.30\'dan 0.75\'e çıkabilirdi. Entry değil, exit sorunun var.',
+            extraEn: 'A 40% capture ratio means you\'re leaving 60% behind. Same entries, later exits — R/R could jump from 0.30 to 0.75. Your problem isn\'t entries, it\'s exits.',
           },
         ]
       }
