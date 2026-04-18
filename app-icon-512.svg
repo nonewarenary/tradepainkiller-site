@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0d0d0d" rx="80"/>
+
+  <g transform="translate(256, 280)">
+    <!-- Bearish red candle -->
+    <line x1="-90" y1="-90" x2="-90" y2="70" stroke="#ff5252" stroke-width="10" stroke-linecap="round"/>
+    <rect x="-112" y="-42" width="44" height="44" rx="8" fill="#ff5252"/>
+    <!-- Mid green candle -->
+    <line x1="0" y1="-130" x2="0" y2="70" stroke="#00c896" stroke-width="10" stroke-linecap="round"/>
+    <rect x="-22" y="-130" width="44" height="90" rx="8" fill="#00c896"/>
+    <!-- Tall green candle -->
+    <line x1="90" y1="-165" x2="90" y2="70" stroke="#00c896" stroke-width="10" stroke-linecap="round"/>
+    <rect x="68" y="-165" width="44" height="110" rx="8" fill="#00c896"/>
+    <!-- Signal dot + pulse rings -->
+    <circle cx="90" cy="-165" r="16" fill="#00c896"/>
+    <circle cx="90" cy="-165" r="34" fill="none" stroke="#00c896" stroke-width="4" opacity="0.45"/>
+    <circle cx="90" cy="-165" r="54" fill="none" stroke="#00c896" stroke-width="2.5" opacity="0.2"/>
+  </g>
+</svg>

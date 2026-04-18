@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#0d0d0d" rx="7"/>
+
+  <g transform="translate(16, 18)">
+    <!-- Red candle -->
+    <line x1="-8" y1="-7" x2="-8" y2="6" stroke="#ff5252" stroke-width="1.2" stroke-linecap="round"/>
+    <rect x="-11" y="-3" width="6" height="5" rx="1" fill="#ff5252"/>
+    <!-- Mid green candle -->
+    <rect x="-3" y="-9" width="6" height="8" rx="1" fill="#00c896"/>
+    <line x1="0" y1="-10" x2="0" y2="6" stroke="#00c896" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- Tall green candle -->
+    <line x1="8" y1="-13" x2="8" y2="6" stroke="#00c896" stroke-width="1.2" stroke-linecap="round"/>
+    <rect x="5" y="-13" width="6" height="10" rx="1" fill="#00c896"/>
+    <!-- Signal dot -->
+    <circle cx="8" cy="-13" r="2" fill="#00c896"/>
+    <circle cx="8" cy="-13" r="4.5" fill="none" stroke="#00c896" stroke-width="0.7" opacity="0.5"/>
+  </g>
+</svg>

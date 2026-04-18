@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="160" viewBox="0 0 600 160">
+  <rect width="600" height="160" fill="#0d0d0d" rx="16"/>
+
+  <!-- Icon mark -->
+  <g transform="translate(72, 80)">
+    <!-- Bearish red candle -->
+    <line x1="-28" y1="-24" x2="-28" y2="20" stroke="#ff5252" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="-35" y="-10" width="14" height="14" rx="2.5" fill="#ff5252"/>
+    <!-- Bullish green candle mid -->
+    <line x1="0" y1="-36" x2="0" y2="20" stroke="#00c896" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="-7" y="-36" width="14" height="26" rx="2.5" fill="#00c896"/>
+    <!-- Bullish green candle tall -->
+    <line x1="28" y1="-46" x2="28" y2="20" stroke="#00c896" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="21" y="-46" width="14" height="32" rx="2.5" fill="#00c896"/>
+    <!-- Signal dot + rings -->
+    <circle cx="28" cy="-46" r="5" fill="#00c896"/>
+    <circle cx="28" cy="-46" r="11" fill="none" stroke="#00c896" stroke-width="1.2" opacity="0.5"/>
+    <circle cx="28" cy="-46" r="18" fill="none" stroke="#00c896" stroke-width="0.7" opacity="0.22"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="140" y="74" font-family="system-ui,-apple-system,sans-serif" font-size="38" font-weight="700" fill="#ffffff">Trade</text>
+  <text x="140" y="74" font-family="system-ui,-apple-system,sans-serif" font-size="38" font-weight="700" fill="#00c896" dx="122">Painkiller</text>
+  <text x="141" y="102" font-family="system-ui,-apple-system,sans-serif" font-size="10" letter-spacing="4" fill="#444">FUTURES ANALYTICS</text>
+</svg>
