@@ -808,10 +808,10 @@
         } catch(e) {}
         // 2) Cloudflare beacon — sadece önemli event'ler
         const important = ['buy_click', 'pricing_reach', 'demo_interact', 'lang_toggle'];
-        if (important.includes(event) && 'sendBeacon' in navigator) {
+        if (important.includes(event)) {
           try {
             const url = `/ping?e=${encodeURIComponent(event)}&s=${session}&v=${encodeURIComponent(meta.v || '')}`;
-            navigator.sendBeacon(url);
+            fetch(url, { method: 'GET', keepalive: true, mode: 'no-cors' }).catch(() => {});
           } catch(e) {}
         }
         // 3) konsol (debug modu)
