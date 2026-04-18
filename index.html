@@ -213,10 +213,12 @@
           <span x-show="lang==='tr'">Örnek Analizi Gör →</span>
           <span x-show="lang==='en'">See Sample Analysis →</span>
         </a>
-        <!-- SECONDARY: Satın alma -->
+        <!-- SECONDARY: Satın alma (sold out'a göre değişir) -->
         <a href="#pricing" class="group px-6 py-3 rounded-xl border border-white/10 hover:border-white/20 transition-all text-sm font-medium text-neutral-300 hover:text-white flex items-center gap-2">
-          <span x-show="lang==='tr'">Lifetime Erişim — $39</span>
-          <span x-show="lang==='en'">Lifetime Access — $39</span>
+          <span x-show="lang==='tr' && !slots.soldOut">Lifetime Erişim — $39</span>
+          <span x-show="lang==='en' && !slots.soldOut">Lifetime Access — $39</span>
+          <span x-show="lang==='tr' && slots.soldOut">Fiyatlandırma →</span>
+          <span x-show="lang==='en' && slots.soldOut">View Pricing →</span>
         </a>
       </div>
 
@@ -551,24 +553,30 @@
         </p>
       </div>
 
-      <!-- Slot counter — GERÇEK SAYIYLA BAŞLIYOR -->
-      <div class="bg-surface-2 border border-orange-500/20 rounded-2xl p-6 mb-6">
+      <!-- Slot counter — DİNAMİK (Worker /api/slots'tan okur) -->
+      <div class="bg-surface-2 border rounded-2xl p-6 mb-6 transition-colors"
+           :class="slots.soldOut ? 'border-loss/30' : 'border-orange-500/20'">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-sm font-medium text-orange-400">
-            <span x-show="lang==='tr'">0 / 30 kullanıcı aldı</span>
-            <span x-show="lang==='en'">0 / 30 users claimed</span>
+          <span class="text-sm font-medium" :class="slots.soldOut ? 'text-loss' : 'text-orange-400'">
+            <span x-show="lang==='tr'" x-text="slots.sold + ' / ' + slots.total + ' kullanıcı aldı'"></span>
+            <span x-show="lang==='en'" x-text="slots.sold + ' / ' + slots.total + ' users claimed'"></span>
           </span>
           <span class="text-xs text-neutral-500">
-            <span x-show="lang==='tr'">30 slot açık</span>
-            <span x-show="lang==='en'">30 slots open</span>
+            <span x-show="lang==='tr' && !slots.soldOut" x-text="slots.available + ' slot açık'"></span>
+            <span x-show="lang==='en' && !slots.soldOut" x-text="slots.available + ' slots open'"></span>
+            <span x-show="lang==='tr' && slots.soldOut" class="text-loss font-medium">slotlar doldu</span>
+            <span x-show="lang==='en' && slots.soldOut" class="text-loss font-medium">slots closed</span>
           </span>
         </div>
         <div class="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden">
-          <div class="progress-fill h-full rounded-full" style="width: 0%"></div>
+          <div class="progress-fill h-full rounded-full transition-all duration-500"
+               :style="'width: ' + Math.min(100, (slots.sold / slots.total) * 100) + '%'"></div>
         </div>
         <p class="text-[11px] text-neutral-600 mt-3">
-          <span x-show="lang==='tr'">Lifetime alanlar fiyat değişiminden etkilenmez.</span>
-          <span x-show="lang==='en'">Lifetime users are unaffected by future price changes.</span>
+          <span x-show="lang==='tr' && !slots.soldOut">Lifetime alanlar fiyat değişiminden etkilenmez.</span>
+          <span x-show="lang==='en' && !slots.soldOut">Lifetime users are unaffected by future price changes.</span>
+          <span x-show="lang==='tr' && slots.soldOut">Lifetime slotları kapandı. Launch sonrası aylık abonelik açılacak.</span>
+          <span x-show="lang==='en' && slots.soldOut">Lifetime slots are closed. Monthly plan opens after launch.</span>
         </p>
       </div>
 
@@ -593,21 +601,25 @@
           </p>
         </div>
         <!-- Lifetime -->
-        <div class="bg-surface-2 border border-gain/30 rounded-2xl p-6 glow-green-sm relative overflow-hidden">
+        <div class="bg-surface-2 rounded-2xl p-6 relative overflow-hidden transition-all"
+             :class="slots.soldOut ? 'border border-loss/20 opacity-60' : 'border border-gain/30 glow-green-sm'">
           <div class="absolute top-3 right-3">
-            <span class="text-[10px] font-semibold bg-gain/10 text-gain px-2.5 py-1 rounded-full border border-gain/20">
-              <span x-show="lang==='tr'">şu an</span>
-              <span x-show="lang==='en'">now</span>
+            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full border"
+                  :class="slots.soldOut ? 'bg-loss/10 text-loss border-loss/20' : 'bg-gain/10 text-gain border-gain/20'">
+              <span x-show="lang==='tr' && !slots.soldOut">şu an</span>
+              <span x-show="lang==='en' && !slots.soldOut">now</span>
+              <span x-show="lang==='tr' && slots.soldOut">kapandı</span>
+              <span x-show="lang==='en' && slots.soldOut">closed</span>
             </span>
           </div>
-          <p class="text-xs text-gain font-medium mb-1">
+          <p class="text-xs font-medium mb-1" :class="slots.soldOut ? 'text-loss/70' : 'text-gain'">
             <span x-show="lang==='tr'">ilk 30 kullanıcı</span>
             <span x-show="lang==='en'">first 30 users</span>
           </p>
           <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-gain font-mono">$39</span>
+            <span class="text-3xl font-bold font-mono" :class="slots.soldOut ? 'text-loss/70 line-through' : 'text-gain'">$39</span>
           </div>
-          <p class="text-xs text-gain/60 mt-2">
+          <p class="text-xs mt-2" :class="slots.soldOut ? 'text-neutral-600' : 'text-gain/60'">
             <span x-show="lang==='tr'">lifetime · bir kez öde · bitti</span>
             <span x-show="lang==='en'">lifetime · pay once · done</span>
           </p>
@@ -624,13 +636,33 @@
 
       <!-- Final CTA -->
       <div class="mt-8 text-center">
-        <a href="https://tradepainkiller.lemonsqueezy.com/checkout/buy/9b5554ff-6b51-4cf9-a681-544f8b978036?media=0&desc=0&discount=0" class="lemonsqueezy-button btn-glow inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gain text-surface-0 text-sm font-semibold" data-theme="dark">
+        <!-- SATIŞ AÇIK durumda -->
+        <a x-show="!slots.soldOut"
+           href="https://tradepainkiller.lemonsqueezy.com/checkout/buy/9b5554ff-6b51-4cf9-a681-544f8b978036?media=0&desc=0&discount=0"
+           class="lemonsqueezy-button btn-glow inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gain text-surface-0 text-sm font-semibold"
+           data-theme="dark">
           <span x-show="lang==='tr'">Lifetime Erişim Al — $39 →</span>
           <span x-show="lang==='en'">Get Lifetime Access — $39 →</span>
         </a>
+
+        <!-- SATIŞ KAPALI durumda -->
+        <div x-show="slots.soldOut" x-cloak>
+          <button disabled
+                  class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-surface-3 border border-white/[0.06] text-neutral-500 text-sm font-semibold cursor-not-allowed">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span x-show="lang==='tr'">Satış kapandı — launch sonrası aylık $7</span>
+            <span x-show="lang==='en'">Sold out — monthly payment after launch</span>
+          </button>
+        </div>
+
+        <!-- Alt açıklama -->
         <p class="text-[11px] text-neutral-600 mt-3 max-w-sm mx-auto leading-relaxed">
-          <span x-show="lang==='tr'">Pre-sale: MVP 4-6 hafta içinde hazır. Ödemen alındığında erken erişim listesine eklenirsin, hazır olduğunda e-posta gelir. Teslim etmezsem %100 iade.</span>
-          <span x-show="lang==='en'">Pre-sale: MVP ships in 4-6 weeks. Payment secures your spot on the early access list — email when ready. 100% refund if I don't ship on time.</span>
+          <span x-show="lang==='tr' && !slots.soldOut">Pre-sale: MVP 4-6 hafta içinde hazır. Ödemen alındığında erken erişim listesine eklenirsin, hazır olduğunda e-posta gelir. Teslim etmezsem %100 iade.</span>
+          <span x-show="lang==='en' && !slots.soldOut">Pre-sale: MVP ships in 4-6 weeks. Payment secures your spot on the early access list — email when ready. 100% refund if I don't ship on time.</span>
+          <span x-show="lang==='tr' && slots.soldOut">30 lifetime slotun tamamı doldu. Pre-sale validasyon aşaması kapandı — launch sonrası aylık $7 ile erişim açılacak.</span>
+          <span x-show="lang==='en' && slots.soldOut">All 30 lifetime slots are taken. Pre-sale validation phase is closed — monthly access at $7 opens after launch.</span>
         </p>
       </div>
     </div>
@@ -663,6 +695,44 @@
       return {
         lang: 'en',
         activeDemo: 0,
+        // ─────────── SLOT STATE ───────────
+        // Worker /api/slots'tan güncellenir. İlk render'da sayfa
+        // "0 / 30" göstermesin diye saçma değer vermiyoruz;
+        // fetch tamamlanana kadar bar boş kalır, sayı "—" görünür.
+        slots: {
+          sold: 0,
+          total: 30,
+          available: 30,
+          soldOut: false,
+          loaded: false,
+        },
+        async fetchSlots() {
+          try {
+            const res = await fetch('/api/slots', { cache: 'no-store' });
+            if (!res.ok) throw new Error('status ' + res.status);
+            const data = await res.json();
+            this.slots = {
+              sold: data.sold ?? 0,
+              total: data.total ?? 30,
+              available: data.available ?? 30,
+              soldOut: !!data.soldOut,
+              loaded: true,
+            };
+          } catch (err) {
+            // Worker erişilemezse default state'te kal (satış açık gibi)
+            console.warn('slots fetch failed', err);
+            this.slots.loaded = true;
+          }
+        },
+        init() {
+          // İlk fetch + 30sn'de bir yenile (sayfa açık kalırsa canlı güncellensin)
+          this.fetchSlots();
+          setInterval(() => this.fetchSlots(), 30000);
+          // Sekme tekrar aktif olunca da yenile
+          document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) this.fetchSlots();
+          });
+        },
         demoTabs: [
           // ─── 1. GECE KAYIPLARI ───
           {

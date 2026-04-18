@@ -12,5 +12,21 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  // ──────────────────────────────────────────────────────────────
+  // KV binding — slot sayısı burada tutuluyor.
+  // ÖNEMLİ: deploy öncesi bir kere "wrangler kv namespace create SLOTS"
+  // çalıştırıp çıkan id'yi aşağıdaki "id" alanına yapıştır.
+  // ──────────────────────────────────────────────────────────────
+  "kv_namespaces": [
+    {
+      "binding": "SLOTS",
+      "id": "3436547bc499477ea7bed02d89a79681"
+    }
   ]
+  // ──────────────────────────────────────────────────────────────
+  // Secrets (wrangler secret put ile eklenecek — bu dosyaya YAZMA):
+  //   LS_WEBHOOK_SECRET → Lemon Squeezy webhook signing secret
+  //   ADMIN_KEY         → /admin/* endpoint'leri için rastgele uzun string
+  // ──────────────────────────────────────────────────────────────
 }
