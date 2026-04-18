@@ -239,12 +239,15 @@
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
         <!-- Stat 1 -->
         <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-loss/20 transition-all glow-red">
-          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">-$403</div>
+          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">-$772</div>
           <div class="text-sm text-neutral-500 mt-2">
-            <span x-show="lang==='tr'">gece trade kaybı</span>
-            <span x-show="lang==='en'">night trade losses</span>
+            <span x-show="lang==='tr'">aylık net kayıp</span>
+            <span x-show="lang==='en'">monthly net loss</span>
           </div>
-          <div class="text-[11px] text-neutral-600 mt-1">23:00 – 03:00</div>
+          <div class="text-[11px] text-neutral-600 mt-1">
+            <span x-show="lang==='tr'">30 gün · 148 işlem</span>
+            <span x-show="lang==='en'">30 days · 148 trades</span>
+          </div>
         </div>
         <!-- Stat 2 -->
         <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-yellow-500/20 transition-all">
@@ -260,14 +263,14 @@
         </div>
         <!-- Stat 3 -->
         <div class="group bg-surface-2 border border-white/[0.06] rounded-2xl p-6 text-center hover:border-loss/20 transition-all glow-red">
-          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">77%</div>
+          <div class="text-4xl md:text-5xl font-bold text-loss font-mono tracking-tight">71%</div>
           <div class="text-sm text-neutral-500 mt-2">
-            <span x-show="lang==='tr'">gece zarar oranı</span>
-            <span x-show="lang==='en'">night loss rate</span>
+            <span x-show="lang==='tr'">revenge trade kayıp oranı</span>
+            <span x-show="lang==='en'">revenge trade loss rate</span>
           </div>
           <div class="text-[11px] text-neutral-600 mt-1">
-            <span x-show="lang==='tr'">47 işlemden 36'sı</span>
-            <span x-show="lang==='en'">36 out of 47 trades</span>
+            <span x-show="lang==='tr'">büyük kayıp sonrası açılan</span>
+            <span x-show="lang==='en'">after big losses</span>
           </div>
         </div>
       </div>
@@ -284,7 +287,7 @@
   <section id="demo" class="py-16 md:py-24">
     <div class="max-w-5xl mx-auto px-5">
       
-      <div class="text-center mb-12">
+      <div class="text-center mb-8">
         <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-3">
           <span x-show="lang==='tr'">Örnek trader'ın 30 günlük analizi</span>
           <span x-show="lang==='en'">Sample trader's 30-day analysis</span>
@@ -295,8 +298,112 @@
         </p>
       </div>
 
+      <!-- ═══════════════════ MINI QUIZ ═══════════════════ -->
+      <div class="max-w-2xl mx-auto mb-8">
+
+        <!-- STATE: idle — CTA card -->
+        <div x-show="quiz.state === 'idle'" x-transition.opacity.duration.200ms
+             class="bg-surface-2 border border-white/[0.08] rounded-2xl p-5 md:p-6">
+          <div class="flex items-start gap-4 flex-col sm:flex-row sm:items-center">
+            <div class="flex-1">
+              <p class="text-sm md:text-base font-medium text-white mb-1">
+                <span x-show="lang==='tr'">Senin profiline göre sıralayalım mı?</span>
+                <span x-show="lang==='en'">Want this ranked for your profile?</span>
+              </p>
+              <p class="text-xs text-neutral-500 leading-relaxed">
+                <span x-show="lang==='tr'">4 soru · 20 saniye · hangi pattern sana en çok para kaybettiriyor, onu öne alalım.</span>
+                <span x-show="lang==='en'">4 questions · 20 seconds · we'll surface the pattern costing you the most first.</span>
+              </p>
+            </div>
+            <div class="flex gap-2 w-full sm:w-auto shrink-0">
+              <button @click="startQuiz()"
+                      class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-gain text-surface-0 text-xs font-semibold hover:opacity-90 transition-opacity">
+                <span x-show="lang==='tr'">Başla</span>
+                <span x-show="lang==='en'">Start</span>
+              </button>
+              <button @click="skipQuiz()"
+                      class="px-4 py-2.5 rounded-lg border border-white/10 text-xs font-medium text-neutral-400 hover:text-neutral-200 hover:border-white/20 transition-all">
+                <span x-show="lang==='tr'">Atla</span>
+                <span x-show="lang==='en'">Skip</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: active — question flow -->
+        <div x-show="quiz.state === 'active'" x-transition.opacity.duration.200ms
+             class="bg-surface-2 border border-gain/20 rounded-2xl p-5 md:p-7">
+
+          <!-- Progress + skip -->
+          <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-mono text-neutral-500"
+                    x-text="(quiz.step + 1) + ' / ' + quizQuestions.length"></span>
+              <div class="flex gap-1">
+                <template x-for="i in quizQuestions.length" :key="i">
+                  <div class="w-6 h-0.5 rounded-full transition-colors"
+                       :class="(i - 1) <= quiz.step ? 'bg-gain' : 'bg-white/10'"></div>
+                </template>
+              </div>
+            </div>
+            <button @click="skipQuiz()"
+                    class="text-[11px] text-neutral-500 hover:text-neutral-300 transition-colors">
+              <span x-show="lang==='tr'">atla →</span>
+              <span x-show="lang==='en'">skip →</span>
+            </button>
+          </div>
+
+          <!-- Question -->
+          <template x-for="(q, qi) in quizQuestions" :key="q.key">
+            <div x-show="quiz.step === qi" x-transition.opacity.duration.200ms>
+              <p class="text-base md:text-lg font-medium text-white mb-5 leading-snug"
+                 x-text="lang === 'tr' ? q.tr : q.en"></p>
+              <div class="flex flex-col gap-2">
+                <template x-for="opt in q.options" :key="opt.val">
+                  <button @click="answerQuiz(q.key, opt.val)"
+                          class="text-left px-4 py-3 rounded-lg border border-white/10 bg-surface-1 hover:bg-white/[0.04] hover:border-gain/30 transition-all text-sm text-neutral-200"
+                          x-text="lang === 'tr' ? opt.tr : opt.en"></button>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- STATE: done — rank summary -->
+        <div x-show="quiz.state === 'done'" x-transition.opacity.duration.200ms
+             class="bg-surface-2 border border-gain/30 rounded-2xl p-5">
+          <div class="flex items-start gap-3">
+            <span class="text-gain text-lg leading-none mt-0.5">✓</span>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-white mb-1">
+                <span x-show="lang==='tr'">Senin profiline göre sıralandı.</span>
+                <span x-show="lang==='en'">Ranked for your profile.</span>
+              </p>
+              <p class="text-xs text-neutral-400 leading-relaxed">
+                <span x-show="lang==='tr'">En sık vurduğun pattern en üstte. Sidebar'daki <span class="text-gain font-medium">↑</span> işareti = senin için yüksek öncelik. Diğerleri de orada, istediğin zaman gez.</span>
+                <span x-show="lang==='en'">Highest-impact pattern is on top. The <span class="text-gain font-medium">↑</span> in the sidebar = high priority for you. The rest are still there if you want to explore.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: skipped — quiet note -->
+        <div x-show="quiz.state === 'skipped'" x-transition.opacity.duration.200ms
+             class="flex items-center justify-between px-4 py-2.5 rounded-lg bg-surface-2/50 border border-white/[0.04]">
+          <p class="text-[11px] text-neutral-500">
+            <span x-show="lang==='tr'">7 insight sırayla, sen gez.</span>
+            <span x-show="lang==='en'">7 insights in order — browse freely.</span>
+          </p>
+          <button @click="quiz.state = 'idle'"
+                  class="text-[11px] text-neutral-400 hover:text-gain transition-colors">
+            <span x-show="lang==='tr'">quiz'i çalıştır →</span>
+            <span x-show="lang==='en'">run the quiz →</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Terminal Window -->
-      <div class="terminal rounded-2xl overflow-hidden">
+      <div id="demo-terminal" class="terminal rounded-2xl overflow-hidden">
         <!-- Terminal header -->
         <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
           <div class="flex items-center gap-2">
@@ -319,7 +426,11 @@
               >
                 <span x-text="tab.icon" class="text-sm"></span>
                 <span x-text="lang === 'tr' ? tab.tr : tab.en"></span>
-                <span x-show="tab.soon" class="ml-auto text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/20">
+                <!-- Quiz önceliği rozeti — top 3'e giren tab'larda görünür -->
+                <span x-show="isTopPriority(i)" 
+                      class="ml-auto flex items-center justify-center w-4 h-4 rounded-full bg-gain/15 text-gain text-[10px] font-bold leading-none"
+                      :title="lang==='tr' ? 'senin için yüksek öncelik' : 'high priority for you'">↑</span>
+                <span x-show="tab.soon && !isTopPriority(i)" class="ml-auto text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/20">
                   <span x-show="lang==='tr'">yakında</span>
                   <span x-show="lang==='en'">soon</span>
                 </span>
@@ -537,6 +648,32 @@
 
   <div class="sep max-w-5xl mx-auto"></div>
 
+  <!-- ═══════════════════ WHY NOW — OBJECTION KIRMA ═══════════════════ -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-2xl mx-auto px-5">
+      <div class="bg-surface-2 border border-loss/15 rounded-2xl p-7 md:p-9">
+        <h2 class="text-xl md:text-2xl font-bold text-white tracking-tight mb-5">
+          <span x-show="lang==='tr'">Bu ay yine kapanış aynı olacak.</span>
+          <span x-show="lang==='en'">This month will close the same way.</span>
+        </h2>
+        <p class="text-sm md:text-base text-neutral-300 leading-relaxed mb-4">
+          <span x-show="lang==='tr'">Tool 4-6 hafta sonra. Pattern'lerin bu ay da çalışıyor.</span>
+          <span x-show="lang==='en'">Tool ships in 4-6 weeks. Your patterns are running this month too.</span>
+        </p>
+        <p class="text-sm text-neutral-400 leading-relaxed mb-4">
+          <span x-show="lang==='tr'">Örnek trader aylık net <span class="text-loss font-medium">-$772</span> kaybediyor: R/R 0.30, revenge trade'lerin %71'i zarar, gece seansı ayrı bir kanal. <span class="text-white">Tek bir hata değil — 5-7 farklı pattern aynı anda para sızdırıyor.</span> "MVP çıksın, ondan sonra bakarım" dediğin her 4 hafta = aynı döngünün tekrarı + $300-800 ekstra kayıp.</span>
+          <span x-show="lang==='en'">The sample trader nets <span class="text-loss font-medium">-$772</span> monthly: R/R 0.30, 71% of revenge trades lose, night session is a separate leak. <span class="text-white">Not one mistake — 5-7 different patterns bleeding money at the same time.</span> Every 4 weeks of "I'll wait for MVP" = same cycle repeating + $300-800 extra loss.</span>
+        </p>
+        <p class="text-sm text-neutral-400 leading-relaxed">
+          <span x-show="lang==='tr'">Pre-sale'in riski var, farkındayım — iade garantisi tam bu yüzden. Vaktinde teslim etmezsem %100 geri. İlk 30 kullanıcı ayrıca build sürecinde öncelik sırasını belirlemede söz sahibi. <span class="text-neutral-300">Validation için yapıyorum bunu; doğru kişi değilsen almamak daha iyi.</span></span>
+          <span x-show="lang==='en'">Pre-sale has risk, I know — that's exactly why the refund guarantee exists. 100% back if I don't ship on time. First 30 users also get a say in which features get priority during the build. <span class="text-neutral-300">I'm doing this for validation; if you're not the right fit, it's better not to buy.</span></span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep max-w-5xl mx-auto"></div>
+
   <!-- ═══════════════════ PRICING & FOMO ═══════════════════ -->
   <section id="pricing" class="py-16 md:py-24 relative">
     <div class="absolute inset-0 hero-glow opacity-50"></div>
@@ -629,8 +766,8 @@
       <!-- Pre-sale argument -->
       <div class="bg-surface-2 border border-white/[0.06] rounded-2xl p-6 mt-6">
         <p class="text-sm text-neutral-400 leading-relaxed">
-          <span x-show="lang==='tr'">Son 1 ayda $200+ kaybettiysen, bu tool kendini zaten amorti eder. Şu an pre-sale: MVP 4-6 hafta içinde hazır olacak. İlk 30 kullanıcı <span class="text-white">lifetime erişim + build süreci boyunca feature input hakkı</span> alır. <span class="text-white">Neden şimdi? Çünkü her ay geçen aynı hatayı tekrarlıyorsun — ve slot dolduğunda bu fiyat kapanır.</span> Söz verdiğim sürede teslim etmezsem %100 iade.</span>
-          <span x-show="lang==='en'">If you lost $200+ last month, this tool pays for itself. This is pre-sale: MVP ships in 4-6 weeks. First 30 users get <span class="text-white">lifetime access + feature input during the build process</span>. <span class="text-white">Why now? Because every month you repeat the same mistakes — and when slots fill, this price is gone.</span> 100% refund if I don't ship on time.</span>
+          <span x-show="lang==='tr'">Ödemen slotunu kilitler — <span class="text-white">lifetime erişim + build süreci boyunca feature önceliği belirlemede söz hakkı</span> alırsın. MVP 4-6 hafta içinde hazır; teslim etmezsem %100 iade.</span>
+          <span x-show="lang==='en'">Your payment locks your slot — <span class="text-white">lifetime access + feature priority input during the build process</span>. MVP ships in 4-6 weeks; 100% refund if I don't deliver on time.</span>
         </p>
       </div>
 
@@ -732,6 +869,113 @@
           document.addEventListener('visibilitychange', () => {
             if (!document.hidden) this.fetchSlots();
           });
+        },
+        // ─────────── QUIZ STATE ───────────
+        // 'idle' → quiz CTA görünür
+        // 'active' → soru akışı
+        // 'done' → demo sıralandı, rozetler aktif
+        // 'skipped' → kullanıcı atladı, default sıra
+        quiz: {
+          state: 'idle',
+          step: 0,
+          answers: { time: null, revenge: null, bias: null, focus: null },
+          rankedIndices: [0, 1, 2, 3, 4, 5, 6],
+        },
+        quizQuestions: [
+          {
+            key: 'time',
+            tr: 'Genelde hangi saatlerde trade ediyorsun?',
+            en: 'When do you usually trade?',
+            options: [
+              { val: 'day',   tr: 'Gündüz (09–18)',    en: 'Daytime (09–18)' },
+              { val: 'night', tr: 'Akşam/gece (18–03)', en: 'Evening/night (18–03)' },
+              { val: 'mixed', tr: 'Karışık / hepsi',    en: 'Mixed / all' },
+            ],
+          },
+          {
+            key: 'revenge',
+            tr: 'Kayıptan sonra hemen tekrar pozisyon açar mısın?',
+            en: 'Do you open another position right after a loss?',
+            options: [
+              { val: 'yes',       tr: 'Evet, sık yapıyorum',       en: 'Yes, often' },
+              { val: 'sometimes', tr: 'Bazen oluyor',              en: 'Sometimes' },
+              { val: 'no',        tr: 'Hayır, beklemeye alırım',   en: 'No, I step back' },
+            ],
+          },
+          {
+            key: 'bias',
+            tr: 'Long/short dengen nasıl?',
+            en: 'What\'s your long/short balance?',
+            options: [
+              { val: 'long',    tr: 'Çoğunlukla long',   en: 'Mostly long' },
+              { val: 'short',   tr: 'Çoğunlukla short',  en: 'Mostly short' },
+              { val: 'balanced', tr: 'Dengeli',          en: 'Balanced' },
+            ],
+          },
+          {
+            key: 'focus',
+            tr: 'En çok hangi soru için buradasın?',
+            en: 'What brought you here most?',
+            options: [
+              { val: 'losing',  tr: '"Nerede para kaybediyorum?"',     en: '"Where am I losing money?"' },
+              { val: 'winrate', tr: '"Winrate yüksek, kâr neden yok?"', en: '"High winrate, no profit — why?"' },
+              { val: 'hidden',  tr: 'Fee/funding gibi görünmez maliyet', en: 'Hidden costs (fees/funding)' },
+              { val: 'all',     tr: 'Hepsini görmek istiyorum',         en: 'I want to see everything' },
+            ],
+          },
+        ],
+        startQuiz() {
+          this.quiz.state = 'active';
+          this.quiz.step = 0;
+          if (window.tpk) window.tpk.track('quiz_start', {});
+        },
+        skipQuiz() {
+          this.quiz.state = 'skipped';
+          if (window.tpk) window.tpk.track('quiz_skip', {});
+        },
+        answerQuiz(key, val) {
+          this.quiz.answers[key] = val;
+          if (this.quiz.step < this.quizQuestions.length - 1) {
+            this.quiz.step++;
+          } else {
+            this.completeQuiz();
+          }
+        },
+        completeQuiz() {
+          const a = this.quiz.answers;
+          // tab key order eşleşir demoTabs ile: 0 night, 1 rr, 2 revenge, 3 funding, 4 fee, 5 oversizing, 6 mfe
+          const s = [0, 0, 0, 0, 0, 0, 0];
+          // S1 — saat
+          if (a.time === 'night')      { s[0] += 3; s[2] += 1; }
+          else if (a.time === 'mixed') { s[0] += 1; }
+          // S2 — revenge davranışı
+          if (a.revenge === 'yes')            { s[2] += 3; s[5] += 2; }
+          else if (a.revenge === 'sometimes') { s[2] += 2; s[5] += 1; }
+          else                                { s[4] += 1; s[3] += 1; }
+          // S3 — long/short
+          if (a.bias === 'long')  { s[3] += 3; }
+          else if (a.bias === 'short') { s[3] -= 1; }
+          // S4 — odak
+          if (a.focus === 'losing')       { s[0] += 2; s[2] += 2; s[5] += 2; }
+          else if (a.focus === 'winrate') { s[1] += 3; s[6] += 2; }
+          else if (a.focus === 'hidden')  { s[4] += 3; s[3] += 3; }
+          else                             { s.forEach((_, i) => s[i] += 1); }
+          // Her tab için baseline 1 (hiçbiri 0 olmasın)
+          const scored = s.map((v, i) => ({ i, v: Math.max(v, 1) }));
+          scored.sort((a, b) => b.v - a.v);
+          this.quiz.rankedIndices = scored.map(x => x.i);
+          this.quiz.state = 'done';
+          this.activeDemo = this.quiz.rankedIndices[0];
+          const topKey = ['night','rr','revenge','funding','fee','oversizing','mfe'][this.quiz.rankedIndices[0]];
+          if (window.tpk) window.tpk.track('quiz_complete', { top: topKey });
+          // Smooth scroll demo'ya
+          setTimeout(() => {
+            const el = document.getElementById('demo-terminal');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 200);
+        },
+        isTopPriority(tabIndex) {
+          return this.quiz.state === 'done' && this.quiz.rankedIndices.slice(0, 3).includes(tabIndex);
         },
         demoTabs: [
           // ─── 1. GECE KAYIPLARI ───
@@ -881,7 +1125,7 @@
           localStorage.setItem(KEY, JSON.stringify(log));
         } catch(e) {}
         // 2) Cloudflare beacon — sadece önemli event'ler
-        const important = ['buy_click', 'pricing_reach', 'demo_interact', 'lang_toggle'];
+        const important = ['buy_click', 'pricing_reach', 'demo_interact', 'lang_toggle', 'quiz_start', 'quiz_complete', 'quiz_skip'];
         if (important.includes(event)) {
           try {
             const url = `/ping?e=${encodeURIComponent(event)}&s=${session}&v=${encodeURIComponent(meta.v || '')}`;
