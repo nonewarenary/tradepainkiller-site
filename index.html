@@ -642,9 +642,9 @@
       </div>
       <div class="flex items-center gap-6 text-xs text-neutral-600">
         <!-- Sosyal linkleri hesapları açtığında gerçek URL'lerle güncelle -->
-        <a href="https://x.com/nonewarenary" class="hover:text-neutral-400 transition-colors">X (Twitter)</a>
-        <a href="https://www.reddit.com/user/nonewarenary/" class="hover:text-neutral-400 transition-colors">Reddit</a>
-        <a href="https://t.me/nonewarenary" class="hover:text-neutral-400 transition-colors">Telegram</a>
+        <a href="#" class="hover:text-neutral-400 transition-colors">X (Twitter)</a>
+        <a href="#" class="hover:text-neutral-400 transition-colors">Reddit</a>
+        <a href="#" class="hover:text-neutral-400 transition-colors">Telegram</a>
         <span>
           <span x-show="lang==='tr'">© 2026 — Binance ile bağlantısı yoktur</span>
           <span x-show="lang==='en'">© 2026 — Not affiliated with Binance</span>
@@ -776,6 +776,137 @@
         ]
       }
     }
+
+    // ═══════════════════════════════════════════════
+    // TPK EVENT TRACKER — lightweight analytics
+    // Cloudflare Web Analytics otomatik pageview topluyor.
+    // Bu tracker custom event'leri localStorage'a yazar,
+    // kritik event'leri Cloudflare path'ine beacon olarak gönderir.
+    // Debug: console'da `tpk.log()` yaz, tüm event'leri gör.
+    // ═══════════════════════════════════════════════
+    window.tpk = (function() {
+      const KEY = 'tpk_events';
+      const SESSION_KEY = 'tpk_session';
+      const session = sessionStorage.getItem(SESSION_KEY) || 
+        (Math.random().toString(36).slice(2, 10));
+      sessionStorage.setItem(SESSION_KEY, session);
+
+      function track(event, meta = {}) {
+        const entry = {
+          t: Date.now(),
+          e: event,
+          s: session,
+          p: location.pathname,
+          ...meta
+        };
+        // 1) localStorage log (debug)
+        try {
+          const log = JSON.parse(localStorage.getItem(KEY) || '[]');
+          log.push(entry);
+          if (log.length > 200) log.shift(); // son 200 event
+          localStorage.setItem(KEY, JSON.stringify(log));
+        } catch(e) {}
+        // 2) Cloudflare beacon — sadece önemli event'ler
+        const important = ['buy_click', 'pricing_reach', 'demo_interact', 'lang_toggle'];
+        if (important.includes(event) && 'sendBeacon' in navigator) {
+          try {
+            const url = `/ping?e=${encodeURIComponent(event)}&s=${session}&v=${encodeURIComponent(meta.v || '')}`;
+            navigator.sendBeacon(url);
+          } catch(e) {}
+        }
+        // 3) konsol (debug modu)
+        if (location.search.includes('debug')) {
+          console.log('[tpk]', event, meta);
+        }
+      }
+
+      return {
+        track,
+        log: () => JSON.parse(localStorage.getItem(KEY) || '[]'),
+        clear: () => localStorage.removeItem(KEY),
+        session: () => session
+      };
+    })();
+
+    // ═══════════════════════════════════════════════
+    // Event listeners — DOM hazır olduğunda
+    // ═══════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      // Page load
+      tpk.track('page_view', { r: document.referrer || 'direct' });
+
+      // Buy button clicks (Lemon Squeezy)
+      document.querySelectorAll('.lemonsqueezy-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tpk.track('buy_click', { v: 'lifetime_39' });
+        });
+      });
+
+      // Hero secondary CTA ("Lifetime Access — $39" scroll to pricing)
+      document.querySelectorAll('a[href="#pricing"]').forEach(link => {
+        link.addEventListener('click', () => {
+          tpk.track('cta_pricing', { v: link.textContent.trim().slice(0, 30) });
+        });
+      });
+
+      // Demo'ya scroll (Örnek Analizi Gör)
+      document.querySelectorAll('a[href="#demo"]').forEach(link => {
+        link.addEventListener('click', () => {
+          tpk.track('cta_demo', {});
+        });
+      });
+
+      // Lang toggle
+      const langBtn = document.querySelector('nav button');
+      if (langBtn) {
+        langBtn.addEventListener('click', () => {
+          tpk.track('lang_toggle', {});
+        });
+      }
+
+      // Pricing section scroll reach (IntersectionObserver)
+      const pricingEl = document.getElementById('pricing');
+      if (pricingEl && 'IntersectionObserver' in window) {
+        let fired = false;
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting && !fired) {
+              fired = true;
+              tpk.track('pricing_reach', {});
+              io.disconnect();
+            }
+          });
+        }, { threshold: 0.3 });
+        io.observe(pricingEl);
+      }
+
+      // Demo section scroll reach
+      const demoEl = document.getElementById('demo');
+      if (demoEl && 'IntersectionObserver' in window) {
+        let fired = false;
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting && !fired) {
+              fired = true;
+              tpk.track('demo_reach', {});
+              io.disconnect();
+            }
+          });
+        }, { threshold: 0.3 });
+        io.observe(demoEl);
+      }
+
+      // Demo tab clicks (Alpine activeDemo değişince bir kere track et)
+      // Alpine state'ine direkt erişmek zor, DOM event'i dinliyoruz
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.demo-tab-active, [class*="demo-tab"]');
+        if (btn && btn.closest('[x-data]')) {
+          // Insight adını buton metninden al
+          const label = btn.innerText.trim().split('\n')[0] || 'unknown';
+          tpk.track('demo_interact', { v: label.slice(0, 20) });
+        }
+      });
+    });
   </script>
 </body>
 </html>
