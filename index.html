@@ -13,14 +13,17 @@
   <meta property="og:description" content="Binance Futures analyzer. Pre-sale open: $39 lifetime access for the first 30 users, MVP shipping in 4-6 weeks. Refund guaranteed if not delivered on time.">
   <meta property="og:url" content="https://tradepainkiller.com">
   <meta property="og:site_name" content="TradePainkiller">
-  <!-- og:image will be added here — update the URL when a 1200x630 image is ready -->
-  <!-- <meta property="og:image" content="https://tradepainkiller.com/og-image.png"> -->
+  <meta property="og:image" content="https://tradepainkiller.com/og_image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="TradePainkiller — Your winrate is high but you're still losing money. Why?">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="TradePainkiller — Your winrate is high but you're still losing money. Why?">
   <meta name="twitter:description" content="Binance Futures analyzer. Pre-sale: $39 lifetime access for the first 30 users, MVP in 4-6 weeks.">
-  <!-- <meta name="twitter:image" content="https://tradepainkiller.com/og-image.png"> -->
+  <meta name="twitter:image" content="https://tradepainkiller.com/og_image.png">
+  <meta name="twitter:image:alt" content="TradePainkiller — Your winrate is high but you're still losing money. Why?">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -878,8 +881,8 @@
         quiz: {
           state: 'idle',
           step: 0,
-          answers: { time: null, revenge: null, bias: null, focus: null },
-          rankedIndices: [0, 1, 2, 3, 4, 5, 6],
+          answers: { time: null, revenge: null, bias: null, leverage: null, focus: null },
+          rankedIndices: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         },
         quizQuestions: [
           {
@@ -913,6 +916,16 @@
             ],
           },
           {
+            key: 'leverage',
+            tr: 'Genelde kaç kaldıraç kullanıyorsun?',
+            en: 'What leverage do you usually use?',
+            options: [
+              { val: 'low',    tr: '3-5x',              en: '3-5x' },
+              { val: 'mid',    tr: '10-15x',            en: '10-15x' },
+              { val: 'high',   tr: '20x ve üstü',       en: '20x and above' },
+            ],
+          },
+          {
             key: 'focus',
             tr: 'En çok hangi soru için buradasın?',
             en: 'What brought you here most?',
@@ -943,21 +956,26 @@
         },
         completeQuiz() {
           const a = this.quiz.answers;
-          // tab key order eşleşir demoTabs ile: 0 night, 1 rr, 2 revenge, 3 funding, 4 fee, 5 oversizing, 6 mfe
-          const s = [0, 0, 0, 0, 0, 0, 0];
+          // tab key order eşleşir demoTabs ile:
+          // 0 night, 1 rr, 2 revenge, 3 funding, 4 fee, 5 oversizing, 6 mfe, 7 hold, 8 leverage
+          const s = [0, 0, 0, 0, 0, 0, 0, 0, 0];
           // S1 — saat
-          if (a.time === 'night')      { s[0] += 3; s[2] += 1; }
+          if (a.time === 'night')      { s[0] += 3; s[2] += 1; s[7] += 1; }
           else if (a.time === 'mixed') { s[0] += 1; }
-          // S2 — revenge davranışı
-          if (a.revenge === 'yes')            { s[2] += 3; s[5] += 2; }
-          else if (a.revenge === 'sometimes') { s[2] += 2; s[5] += 1; }
+          // S2 — revenge davranışı (ayrıca hold-asymmetry için güçlü sinyal)
+          if (a.revenge === 'yes')            { s[2] += 3; s[5] += 2; s[7] += 2; }
+          else if (a.revenge === 'sometimes') { s[2] += 2; s[5] += 1; s[7] += 1; }
           else                                { s[4] += 1; s[3] += 1; }
           // S3 — long/short
           if (a.bias === 'long')  { s[3] += 3; }
           else if (a.bias === 'short') { s[3] -= 1; }
-          // S4 — odak
-          if (a.focus === 'losing')       { s[0] += 2; s[2] += 2; s[5] += 2; }
-          else if (a.focus === 'winrate') { s[1] += 3; s[6] += 2; }
+          // S4 — kaldıraç (YENİ)
+          if (a.leverage === 'high')     { s[8] += 3; s[5] += 1; s[1] += 1; }
+          else if (a.leverage === 'mid') { s[8] += 2; }
+          else if (a.leverage === 'low') { s[6] += 1; s[1] += 1; }
+          // S5 — odak
+          if (a.focus === 'losing')       { s[0] += 2; s[2] += 2; s[5] += 2; s[7] += 1; }
+          else if (a.focus === 'winrate') { s[1] += 3; s[6] += 2; s[8] += 1; }
           else if (a.focus === 'hidden')  { s[4] += 3; s[3] += 3; }
           else                             { s.forEach((_, i) => s[i] += 1); }
           // Her tab için baseline 1 (hiçbiri 0 olmasın)
@@ -966,7 +984,7 @@
           this.quiz.rankedIndices = scored.map(x => x.i);
           this.quiz.state = 'done';
           this.activeDemo = this.quiz.rankedIndices[0];
-          const topKey = ['night','rr','revenge','funding','fee','oversizing','mfe'][this.quiz.rankedIndices[0]];
+          const topKey = ['night','rr','revenge','funding','fee','oversizing','mfe','hold','leverage'][this.quiz.rankedIndices[0]];
           if (window.tpk) window.tpk.track('quiz_complete', { top: topKey });
           // Smooth scroll demo'ya
           setTimeout(() => {
@@ -1093,6 +1111,38 @@
             bodyEn: '67 winning trades realized: $227. If closed at peak: $573. You exit too early. Wins stay small, and your R/R breaks down.',
             extraTr: 'Capture ratio %40 demek potansiyel kârının %60\'ını görmüyorsun. Aynı entry\'ler, daha geç çıkışlar — R/R\'ın 0.30\'dan 0.75\'e çıkabilirdi. Entry değil, exit sorunun var.',
             extraEn: 'A 40% capture ratio means you\'re leaving 60% behind. Same entries, later exits — R/R could jump from 0.30 to 0.75. Your problem isn\'t entries, it\'s exits.',
+          },
+          // ─── 8. HOLD ASYMMETRY (YENİ) ───
+          {
+            icon: '⏱️',
+            tr: 'Hold Asimetrisi',
+            en: 'Hold Asymmetry',
+            titleTr: 'Kazanç vs Kayıp Tutma Süresi',
+            titleEn: 'Win vs Loss Hold Duration',
+            insightClass: 'insight-purple',
+            titleColor: 'text-purple-400',
+            headlineTr: 'Ortalama kazanç hold süresi 18 dk. Ortalama kayıp hold süresi 3 saat 42 dk — kaybederken 12x daha uzun bekliyorsun.',
+            headlineEn: 'Avg winning hold: 18 min. Avg losing hold: 3h 42m — you hold losers 12x longer than winners.',
+            bodyTr: 'Klasik loss aversion: kazancı hemen realize ediyorsun ("masada kalmasın"), kaybı ise "dönecek" diye tutuyorsun. Sonuç: küçük win\'ler + büyük kayıplar. R/R\'ı sen değil, duygu kuruyor.',
+            bodyEn: 'Classic loss aversion: you realize wins fast ("before it disappears") but hold losses hoping for reversal. Result: small wins, big losses. Emotion is sizing your R/R, not you.',
+            extraTr: 'Prospect theory: kayıp, aynı büyüklükteki kazançtan 2x daha ağır hissediliyor. Bu yüzden kaybı "kabul etmek" zor, "umut etmek" kolay. Ama veride "umut" bir strateji değil — ertelenen kayıp.',
+            extraEn: 'Prospect theory: a loss feels ~2x heavier than an equal-sized gain. That\'s why accepting losses feels hard and hoping feels easy. But in data, "hope" isn\'t a strategy — it\'s a postponed loss.',
+          },
+          // ─── 9. LEVERAGE TRAP (YENİ) ───
+          {
+            icon: '⚡',
+            tr: 'Kaldıraç Tuzağı',
+            en: 'Leverage Trap',
+            titleTr: 'Kaldıraç / Winrate Korelasyonu',
+            titleEn: 'Leverage / Winrate Correlation',
+            insightClass: 'insight-red',
+            titleColor: 'text-red-400',
+            headlineTr: '5x\'te %58 winrate, net +$94. 20x\'te %41 winrate, net -$643. Kaldıraç arttıkça winrate düşüyor.',
+            headlineEn: 'At 5x: 58% winrate, net +$94. At 20x: 41% winrate, net -$643. Higher leverage → lower winrate.',
+            bodyTr: 'Yüksek kaldıraçta volatilite seni stop\'a atıyor, düşükte pozisyon nefes alıyor. Aynı setup\'lar, farklı sonuçlar. Sweet spot\'un veri diyor ki 3-5x — sen çoğunlukla 15x+ kullanıyorsun.',
+            bodyEn: 'High leverage lets normal volatility hit your stop; low leverage gives the position room to breathe. Same setups, different outcomes. Your data says sweet spot is 3-5x — you mostly trade 15x+.',
+            extraTr: 'Kaldıraç kazancı büyütmez, pozisyon boyutunu büyütür. %1\'lik ters hareket 20x\'te %20 kayıp. PnL\'in kaldıraca göre parçalanınca net zarar bariz: kaldıraç ne kadar yüksek, ortalama kayıp o kadar büyük.',
+            extraEn: 'Leverage doesn\'t multiply profit — it multiplies position size. A 1% adverse move = 20% loss at 20x. When PnL breaks down by leverage, the net loss is obvious: higher leverage, bigger average loss.',
           },
         ]
       }
